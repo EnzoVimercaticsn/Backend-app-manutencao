@@ -1,10 +1,16 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 dotenv.config();
 
 const app = express();
 const requestedPort = Number(process.env.PORT || 3000);
+
+// Habilita CORS. Configure a origem via env `CORS_ORIGIN` ou permita todas com '*'.
+const corsOrigin = process.env.CORS_ORIGIN || '*';
+app.use(cors({ origin: corsOrigin }));
+app.options('*', cors({ origin: corsOrigin }));
 
 app.use(express.json());
 

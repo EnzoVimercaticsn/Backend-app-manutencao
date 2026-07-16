@@ -11,6 +11,8 @@ exports.listarUsuarios = async (req, res) => {
 
 exports.buscarUsuarioPorMatricula = async (req, res) => {
   try {
+    const matricula = req.params.matricula;
+    if (!matricula || matricula === 'undefined' || matricula === 'null') return res.status(400).json({ error: 'Parâmetro "matricula" é obrigatório' });
     const [rows] = await db.query('SELECT * FROM usuario WHERE uso_matric = ?', [req.params.matricula]);
     if (rows.length === 0) return res.status(404).json({ message: 'Usuário não encontrado' });
     res.json(rows[0]);
@@ -34,6 +36,8 @@ exports.criarUsuario = async (req, res) => {
 
 exports.atualizarUsuario = async (req, res) => {
   try {
+    const matricula = req.params.matricula;
+    if (!matricula || matricula === 'undefined' || matricula === 'null') return res.status(400).json({ error: 'Parâmetro "matricula" é obrigatório' });
     const { uso_nome, uso_senha, uso_is_adm, uso_empresa } = req.body;
     await db.query(
       'UPDATE usuario SET uso_nome = ?, uso_senha = ?, uso_is_adm = ?, uso_empresa = ? WHERE uso_matric = ?',
@@ -47,6 +51,8 @@ exports.atualizarUsuario = async (req, res) => {
 
 exports.deletarUsuario = async (req, res) => {
   try {
+    const matricula = req.params.matricula;
+    if (!matricula || matricula === 'undefined' || matricula === 'null') return res.status(400).json({ error: 'Parâmetro "matricula" é obrigatório' });
     await db.query('DELETE FROM usuario WHERE uso_matric = ?', [req.params.matricula]);
     res.json({ message: 'Usuário removido com sucesso' });
   } catch (error) {
