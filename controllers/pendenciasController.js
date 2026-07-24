@@ -49,6 +49,7 @@ exports.criarPendencia = async (req, res) => {
 
     const {
       pen_local,
+      pen_data_inicial,
       pen_data_da_verifi,
       pen_area,
       pen_desc,
@@ -61,6 +62,7 @@ exports.criarPendencia = async (req, res) => {
       `INSERT INTO pendencias
       (
         pen_local,
+        pen_data_inicial,
         pen_data_da_verifi,
         pen_area,
         pen_desc,
@@ -68,9 +70,10 @@ exports.criarPendencia = async (req, res) => {
         pen_descumprimento_legis,
         pra_cod
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         pen_local,
+        pen_data_inicial,
         pen_data_da_verifi,
         pen_area,
         pen_desc,
@@ -100,6 +103,7 @@ exports.atualizarPendencia = async (req, res) => {
 
     const {
       pen_local,
+      pen_data_inicial,
       pen_data_da_verifi,
       pen_area,
       pen_desc,
@@ -112,6 +116,7 @@ exports.atualizarPendencia = async (req, res) => {
       `UPDATE pendencias
        SET
           pen_local = ?,
+          pen_data_inicial = ?,
           pen_data_da_verifi = ?,
           pen_area = ?,
           pen_desc = ?,
@@ -121,6 +126,7 @@ exports.atualizarPendencia = async (req, res) => {
        WHERE pen_cod = ?`,
       [
         pen_local,
+        pen_data_inicial,
         pen_data_da_verifi,
         pen_area,
         pen_desc,
