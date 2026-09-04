@@ -1,59 +1,21 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const cors = require('cors');
+require('dotenv').config();
 
-dotenv.config();
+const app = require('./src/app');
+const { pool } = require('./src/database/db');
 
-const app = express();
-const requestedPort = Number(process.env.PORT || 3000);
+const port = Number(process.env.PORT || 4000);
+const host = process.env.HOST || '0.0.0.0';
 
-// Habilita CORS
-const corsOrigin = process.env.CORS_ORIGIN || '*';
-app.use(cors({ origin: corsOrigin }));
-app.options('*', cors({ origin: corsOrigin }));
-
-// Habilita JSON
-app.use(express.json());
-
-// Rota principal
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Backend da aplicação de manutenção rodando.',
-    endpoints: [
-      '/pendencias',
-      '/prazos',
-      '/usuarios',
-      '/datas'
-    ]
-  });
+const server = app.listen(port, host, () => {
+  console.log(`API rodando em http://${host}:${port}`);
 });
 
-// Rotas da aplicação
-app.use('/pendencias', require('./routes/pendencias'));
-app.use('/prazos', require('./routes/prazos'));
-app.use('/usuarios', require('./routes/usuarios'));
-app.use('/datas', require('./routes/datas'));
-
-// Inicialização do servidor
-function startServer(port) {
-  const server = app.listen(port, () => {
-    console.log(`Servidor rodando na porta ${port}`);
-  });
-
-  server.on('error', (error) => {
-    if (error.code === 'EADDRINUSE') {
-      const fallbackPort = port + 1;
-      console.warn(
-        `Porta ${port} já está em uso. Tentando ${fallbackPort}...`
-      );
-
-      server.close(() => startServer(fallbackPort));
-      return;
-    }
-
-    console.error(error);
-    process.exit(1);
+function encerrar() {
+  server.close(async () => {
+    await pool.end();
+    process.exit(0);
   });
 }
 
-startServer(requestedPort);
+process.on('SIGINT', encerrar);
+process.on('SIGTERM', encerrar);
