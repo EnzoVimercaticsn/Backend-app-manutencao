@@ -152,23 +152,43 @@ exports.atualizarPendencia = async (req, res) => {
 };
 
 exports.deletarPendencia = async (req, res) => {
+  const connection = await db.getConnection();
   try {
+    await connection.beginTransaction();
 
-    await db.query(
-      'DELETE FROM pendencias WHERE pen_cod = ?',
+    const [pendencias] = await connection.query(
+      'SELECT pra_cod FROM pendencias WHERE pen_cod = ? FOR UPDATE',
       [req.params.id]
     );
 
+    if (pendencias.length === 0) {
+      await connection.rollback();
+      return res.status(404).json({ message: 'Pendência não encontrada' });
+    }
+
+    await connection.query('DELETE FROM pendencias WHERE pen_cod = ?', [req.params.id]);
+
+    const prazoId = pendencias[0].pra_cod;
+    if (prazoId !== null && prazoId !== undefined) {
+      await connection.query('DELETE FROM prazos WHERE pra_cod = ?', [prazoId]);
+    }
+
+    await connection.commit();
+
     res.json({
-      message: 'Pendência removida com sucesso'
+      message: 'Pendência e prazo removidos com sucesso'
     });
 
   } catch (error) {
+    await connection.rollback();
 
     res.status(500).json({
       error: 'Erro ao remover pendência',
       details: error.message
     });
+
+  } finally {
+    connection.release();
 
   }
 };
