@@ -139,6 +139,86 @@ exports.atualizarPrazo = async (req, res) => {
   }
 };
 
+exports.atualizarPrazoComHistorico = async (req, res) => {
+  const connection = await db.getConnection();
+  try {
+    const prazoId = Number(req.params.id);
+    const pendenciaId = Number(req.body.pen_cod);
+    const {
+      pra_prazo,
+      pra_observacao,
+      pra_responsavel,
+      pra_status,
+      pra_vezes_adi,
+      dat_alterado_por
+    } = req.body;
+
+    if (!Number.isSafeInteger(prazoId) || !Number.isSafeInteger(pendenciaId) || !pra_prazo) {
+      return res.status(400).json({ error: 'Prazo, pendência e nova data são obrigatórios' });
+    }
+
+    await connection.beginTransaction();
+    const [rows] = await connection.query(
+      `SELECT pr.pra_prazo, pe.pen_data_inicial
+       FROM prazos pr
+       JOIN pendencias pe ON pe.pra_cod = pr.pra_cod
+       WHERE pr.pra_cod = ? AND pe.pen_cod = ?
+       FOR UPDATE`,
+      [prazoId, pendenciaId]
+    );
+
+    if (!rows.length) {
+      await connection.rollback();
+      return res.status(404).json({ error: 'Prazo ou pendência não encontrado' });
+    }
+
+    const prazoAnterior = rows[0].pra_prazo;
+    const dataAnterior = prazoAnterior instanceof Date
+      ? prazoAnterior.toISOString().slice(0, 10)
+      : String(prazoAnterior || '').slice(0, 10);
+    const anoAnterior = Number(dataAnterior.slice(0, 4));
+    let dataInicialAtualizada = false;
+
+    if (anoAnterior > 1900) {
+      const [resultadoDataInicial] = await connection.query(
+        `UPDATE pendencias
+         SET pen_data_inicial = ?
+         WHERE pen_cod = ?
+           AND (pen_data_inicial IS NULL OR YEAR(pen_data_inicial) <= 1900)`,
+        [dataAnterior, pendenciaId]
+      );
+      dataInicialAtualizada = resultadoDataInicial.affectedRows > 0;
+    }
+
+    await connection.query(
+      `UPDATE prazos
+       SET pra_prazo = ?, pra_observacao = ?, pra_responsavel = ?,
+           pra_status = ?, pra_vezes_adi = ?,
+           pra_concluido_em = CASE WHEN ? IS NULL THEN COALESCE(pra_concluido_em, NOW()) ELSE NULL END
+       WHERE pra_cod = ?`,
+      [pra_prazo, pra_observacao, pra_responsavel, pra_status, pra_vezes_adi, pra_status, prazoId]
+    );
+
+    await connection.query(
+      `INSERT INTO datas (data_prazo, pra_cod, dat_vezes_adi, dat_alterado_por)
+       VALUES (?, ?, ?, ?)`,
+      [pra_prazo, prazoId, pra_vezes_adi, dat_alterado_por || null]
+    );
+
+    await connection.commit();
+    res.json({
+      message: 'Prazo atualizado e histórico salvo',
+      dataInicialAtualizada,
+      dataInicial: dataInicialAtualizada ? dataAnterior : rows[0].pen_data_inicial
+    });
+  } catch (error) {
+    await connection.rollback();
+    res.status(500).json({ error: 'Erro ao atualizar prazo e histórico', details: error.message });
+  } finally {
+    connection.release();
+  }
+};
+
 exports.deletarPrazo = async (req, res) => {
   try {
 

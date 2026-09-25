@@ -157,7 +157,7 @@ exports.registrarDataInicial = async (req, res) => {
     const [result] = await db.query(
       `UPDATE pendencias
        SET pen_data_inicial = ?
-       WHERE pen_cod = ? AND (pen_data_inicial IS NULL OR pen_data_inicial = '')`,
+      WHERE pen_cod = ? AND (pen_data_inicial IS NULL OR pen_data_inicial = '' OR YEAR(pen_data_inicial) <= 1900)`,
       [dataInicial, req.params.id]
     );
     res.json({ atualizada: Boolean(result.affectedRows), message: 'Data inicial processada' });
