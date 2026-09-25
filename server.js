@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const db = require('./db');
 
 dotenv.config();
 
@@ -35,6 +36,23 @@ app.use('/usuarios', require('./routes/usuarios'));
 app.use('/datas', require('./routes/datas'));
 
 // Inicialização do servidor
+async function garantirColunasSolicitacao() {
+  const [colunas] = await db.query('SHOW COLUMNS FROM pendencias');
+  const existentes = new Set(colunas.map(coluna => coluna.Field));
+  const novasColunas = {
+    pen_solicitacao_conclusao: 'VARCHAR(20) NULL',
+    pen_prova_conclusao: 'LONGTEXT NULL',
+    pen_solicitada_por: 'INT NULL',
+    pen_solicitada_em: 'DATETIME NULL'
+  };
+
+  for (const [nome, definicao] of Object.entries(novasColunas)) {
+    if (!existentes.has(nome)) {
+      await db.query(`ALTER TABLE pendencias ADD COLUMN ${nome} ${definicao}`);
+    }
+  }
+}
+
 function startServer(port) {
   const server = app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
@@ -56,4 +74,9 @@ function startServer(port) {
   });
 }
 
-startServer(requestedPort);
+garantirColunasSolicitacao()
+  .then(() => startServer(requestedPort))
+  .catch(error => {
+    console.error('Não foi possível preparar o banco de dados:', error);
+    process.exit(1);
+  });
