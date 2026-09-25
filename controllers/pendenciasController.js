@@ -151,6 +151,21 @@ exports.atualizarPendencia = async (req, res) => {
   }
 };
 
+exports.registrarDataInicial = async (req, res) => {
+  try {
+    const dataInicial = req.body.pen_data_inicial || null;
+    const [result] = await db.query(
+      `UPDATE pendencias
+       SET pen_data_inicial = ?
+       WHERE pen_cod = ? AND (pen_data_inicial IS NULL OR pen_data_inicial = '')`,
+      [dataInicial, req.params.id]
+    );
+    res.json({ atualizada: Boolean(result.affectedRows), message: 'Data inicial processada' });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao registrar data inicial', details: error.message });
+  }
+};
+
 exports.deletarPendencia = async (req, res) => {
   const connection = await db.getConnection();
   try {
@@ -262,7 +277,7 @@ async function decidirConclusao(req, res, aprovar) {
       [aprovar ? 'aprovada' : 'reprovada', req.params.id]
     );
     if (aprovar) {
-      await connection.query('UPDATE prazos SET pra_status = NULL WHERE pra_cod = ?', [rows[0].pra_cod]);
+      await connection.query('UPDATE prazos SET pra_status = NULL, pra_concluido_em = COALESCE(pra_concluido_em, NOW()) WHERE pra_cod = ?', [rows[0].pra_cod]);
     }
     await connection.commit();
     res.json({ message: aprovar ? 'Conclusão aprovada' : 'Conclusão reprovada' });

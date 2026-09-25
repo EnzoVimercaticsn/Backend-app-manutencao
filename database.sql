@@ -19,11 +19,12 @@ CREATE TABLE IF NOT EXISTS pendencias (
 
 CREATE TABLE IF NOT EXISTS prazos (
     pra_cod INT AUTO_INCREMENT PRIMARY KEY,
-    pra_prazo DATE NOT NULL,
+    pra_prazo DATE NULL,
     pra_observacao VARCHAR(1000),
     pra_responsavel VARCHAR(255),
     pra_status BOOLEAN,
-    pra_vezes_adi INT NOT NULL DEFAULT 0
+    pra_vezes_adi INT NOT NULL DEFAULT 0,
+    pra_concluido_em DATETIME NULL
 );
 
 CREATE TABLE IF NOT EXISTS datas (

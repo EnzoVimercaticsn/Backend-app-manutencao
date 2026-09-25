@@ -53,7 +53,8 @@ exports.criarPrazo = async (req, res) => {
       pra_observacao,
       pra_responsavel,
       pra_status,
-      pra_vezes_adi
+      pra_vezes_adi,
+      pra_concluido_em
     } = req.body;
 
     const [result] = await db.query(
@@ -63,15 +64,17 @@ exports.criarPrazo = async (req, res) => {
         pra_observacao,
         pra_responsavel,
         pra_status,
-        pra_vezes_adi
+        pra_vezes_adi,
+        pra_concluido_em
       )
-      VALUES (?, ?, ?, ?, ?)`,
+      VALUES (?, ?, ?, ?, ?, ?)`,
       [
         pra_prazo,
         pra_observacao,
         pra_responsavel,
         pra_status,
-        pra_vezes_adi ?? 0
+        pra_vezes_adi ?? 0,
+        pra_status === null ? (pra_concluido_em || new Date()) : null
       ]
     );
 
@@ -108,7 +111,8 @@ exports.atualizarPrazo = async (req, res) => {
           pra_observacao = ?,
           pra_responsavel = ?,
           pra_status = ?,
-          pra_vezes_adi = ?
+          pra_vezes_adi = ?,
+          pra_concluido_em = CASE WHEN ? IS NULL THEN COALESCE(pra_concluido_em, NOW()) ELSE NULL END
        WHERE pra_cod = ?`,
       [
         pra_prazo,
@@ -116,6 +120,7 @@ exports.atualizarPrazo = async (req, res) => {
         pra_responsavel,
         pra_status,
         pra_vezes_adi,
+        pra_status,
         req.params.id
       ]
     );

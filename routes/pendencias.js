@@ -7,6 +7,7 @@ const {
   buscarPendenciaPorId,
   criarPendencia,
   atualizarPendencia,
+  registrarDataInicial,
   deletarPendencia
   , listarSolicitacoesConclusao
   , solicitarConclusao
@@ -19,6 +20,7 @@ router.get('/solicitacoes-conclusao', requireCsnAdmin, listarSolicitacoesConclus
 router.get('/:id', buscarPendenciaPorId);
 router.post('/', criarPendencia);
 router.put('/:id', atualizarPendencia);
+router.patch('/:id/data-inicial', registrarDataInicial);
 router.delete('/:id', requireAdmin, deletarPendencia);
 router.delete('/:id/excluir-csn', requireCsnPassword, deletarPendencia);
 router.post('/:id/solicitar-conclusao', requireUsuarioNaoCSN, solicitarConclusao);

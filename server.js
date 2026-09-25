@@ -58,6 +58,8 @@ async function garantirColunasSolicitacao() {
       }
     }
   }
+  await db.query('ALTER TABLE prazos MODIFY COLUMN pra_prazo DATE NULL');
+  await db.query('ALTER TABLE prazos ADD COLUMN IF NOT EXISTS pra_concluido_em DATETIME NULL');
 }
 
 function startServer(port) {
