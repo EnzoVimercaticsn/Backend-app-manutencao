@@ -210,6 +210,14 @@ exports.listarSolicitacoesConclusao = async (req, res) => {
 
 exports.solicitarConclusao = async (req, res) => {
   const { imagemBase64 } = req.body;
+  const penCod = Number(req.params.id);
+  const matricula = Number(req.usuarioMatricula);
+  const solicitadaPor = Number.isSafeInteger(matricula) ? matricula : null;
+
+  if (!Number.isSafeInteger(penCod)) {
+    return res.status(400).json({ error: 'Código da pendência inválido' });
+  }
+
   if (typeof imagemBase64 !== 'string' || !imagemBase64.startsWith('data:image/')) {
     return res.status(400).json({ error: 'Envie uma imagem válida em base64' });
   }
@@ -225,7 +233,7 @@ exports.solicitarConclusao = async (req, res) => {
            pen_solicitada_por = ?,
            pen_solicitada_em = NOW()
        WHERE pen_cod = ? AND (pen_solicitacao_conclusao IS NULL OR pen_solicitacao_conclusao = 'reprovada')`,
-      [imagemBase64, req.usuarioMatricula, req.params.id]
+      [imagemBase64, solicitadaPor, penCod]
     );
     if (!result.affectedRows) return res.status(409).json({ error: 'Pendência já concluída ou com solicitação em análise' });
     res.json({ message: 'Solicitação de conclusão enviada' });
