@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const requireAdmin = require('../middleware/admin');
-const { requireUsuarioNaoCSN, requireCsnAdmin } = require('../middleware/csnAdmin');
+const { requireUsuarioNaoCSN, requireCsnAdmin, requireCsnPassword } = require('../middleware/csnAdmin');
 const {
   listarPendencias,
   buscarPendenciaPorId,
@@ -20,6 +20,7 @@ router.get('/:id', buscarPendenciaPorId);
 router.post('/', criarPendencia);
 router.put('/:id', atualizarPendencia);
 router.delete('/:id', requireAdmin, deletarPendencia);
+router.delete('/:id/excluir-csn', requireCsnPassword, deletarPendencia);
 router.post('/:id/solicitar-conclusao', requireUsuarioNaoCSN, solicitarConclusao);
 router.post('/:id/aprovar-conclusao', requireCsnAdmin, aprovarConclusao);
 router.post('/:id/reprovar-conclusao', requireCsnAdmin, reprovarConclusao);

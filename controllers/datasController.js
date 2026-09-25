@@ -50,7 +50,8 @@ exports.criarData = async (req, res) => {
     const {
       data_prazo,
       pra_cod,
-      dat_vezes_adi
+      dat_vezes_adi,
+      dat_alterado_por
     } = req.body;
 
     const [result] = await db.query(
@@ -58,13 +59,15 @@ exports.criarData = async (req, res) => {
       (
         data_prazo,
         pra_cod,
-        dat_vezes_adi
+        dat_vezes_adi,
+        dat_alterado_por
       )
-      VALUES (?, ?, ?)`,
+      VALUES (?, ?, ?, ?)` ,
       [
         data_prazo,
         pra_cod,
-        dat_vezes_adi
+        dat_vezes_adi,
+        dat_alterado_por
       ]
     );
 
@@ -89,7 +92,8 @@ exports.atualizarData = async (req, res) => {
     const {
       data_prazo,
       pra_cod,
-      dat_vezes_adi
+      dat_vezes_adi,
+      dat_alterado_por
     } = req.body;
 
     await db.query(
@@ -97,12 +101,14 @@ exports.atualizarData = async (req, res) => {
        SET
           data_prazo = ?,
           pra_cod = ?,
-          dat_vezes_adi = ?
+          dat_vezes_adi = ?,
+          dat_alterado_por = ?
        WHERE dat_cod = ?`,
       [
         data_prazo,
         pra_cod,
         dat_vezes_adi,
+        dat_alterado_por,
         req.params.id
       ]
     );

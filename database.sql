@@ -10,6 +10,10 @@ CREATE TABLE IF NOT EXISTS pendencias (
     pen_desc VARCHAR(1000),
     pen_item_con VARCHAR(500),
     pen_descumprimento_legis VARCHAR(1000),
+    pen_solicitacao_conclusao VARCHAR(20) NULL,
+    pen_prova_conclusao LONGTEXT NULL,
+    pen_solicitada_por INT NULL,
+    pen_solicitada_em DATETIME NULL,
     pra_cod INT NULL
 );
 
@@ -26,7 +30,8 @@ CREATE TABLE IF NOT EXISTS datas (
     dat_cod INT AUTO_INCREMENT PRIMARY KEY,
     data_prazo DATE NOT NULL,
     pra_cod INT NOT NULL,
-    dat_vezes_adi INT NOT NULL DEFAULT 0
+    dat_vezes_adi INT NOT NULL DEFAULT 0,
+    dat_alterado_por VARCHAR(255) NULL
 );
 
 CREATE TABLE IF NOT EXISTS usuario (
