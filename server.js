@@ -13,7 +13,7 @@ app.use(cors({ origin: corsOrigin }));
 app.options('*', cors({ origin: corsOrigin }));
 
 // Habilita JSON
-app.use(express.json());
+app.use(express.json({ limit: '12mb' }));
 
 // Rota principal
 app.get('/', (req, res) => {
