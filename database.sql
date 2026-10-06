@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS pendencias (
     pen_solicitacao_conclusao VARCHAR(20) NULL,
     pen_prova_conclusao LONGTEXT NULL,
     pen_motivo_reprovacao VARCHAR(2000) NULL,
-    pen_solicitada_por INT NULL,
+    pen_solicitada_por VARCHAR(50) NULL,
     pen_solicitada_em DATETIME NULL,
     pra_cod INT NULL
 );
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS datas (
 );
 
 CREATE TABLE IF NOT EXISTS usuario (
-    uso_matric INT PRIMARY KEY,
+    uso_matric VARCHAR(50) PRIMARY KEY,
     uso_nome VARCHAR(255) NOT NULL,
     uso_senha VARCHAR(255) NOT NULL,
     uso_is_adm BOOLEAN NOT NULL DEFAULT FALSE,

@@ -225,9 +225,8 @@ exports.listarSolicitacoesConclusao = async (req, res) => {
 
 exports.listarMinhasSolicitacoesConclusao = async (req, res) => {
   try {
-    const matriculaInformada = String(req.get('x-user-matricula') ?? '').trim();
-    const matricula = Number(matriculaInformada);
-    if (!matriculaInformada || !Number.isSafeInteger(matricula)) {
+    const matricula = String(req.get('x-user-matricula') ?? '').trim();
+    if (!/^[a-z0-9_-]{1,50}$/i.test(matricula)) {
       return res.status(400).json({ error: 'Matrícula inválida' });
     }
 
@@ -249,8 +248,11 @@ exports.listarMinhasSolicitacoesConclusao = async (req, res) => {
 exports.solicitarConclusao = async (req, res) => {
   const { imagemBase64 } = req.body;
   const penCod = Number(req.params.id);
-  const matricula = Number(req.usuarioMatricula);
-  const solicitadaPor = Number.isSafeInteger(matricula) ? matricula : null;
+  const solicitadaPor = String(req.usuarioMatricula ?? '').trim();
+
+  if (!/^[a-z0-9_-]{1,50}$/i.test(solicitadaPor)) {
+    return res.status(400).json({ error: 'Matrícula inválida para registrar a solicitação' });
+  }
 
   if (!Number.isSafeInteger(penCod)) {
     return res.status(400).json({ error: 'Código da pendência inválido' });

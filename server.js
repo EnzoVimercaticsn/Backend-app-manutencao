@@ -42,7 +42,7 @@ async function garantirColunasSolicitacao() {
       pen_solicitacao_conclusao: 'VARCHAR(20) NULL',
       pen_prova_conclusao: 'LONGTEXT NULL',
       pen_motivo_reprovacao: 'VARCHAR(2000) NULL',
-      pen_solicitada_por: 'INT NULL',
+      pen_solicitada_por: 'VARCHAR(50) NULL',
       pen_solicitada_em: 'DATETIME NULL'
     },
     datas: {
@@ -59,6 +59,8 @@ async function garantirColunasSolicitacao() {
       }
     }
   }
+  await db.query('ALTER TABLE usuario MODIFY COLUMN uso_matric VARCHAR(50) NOT NULL');
+  await db.query('ALTER TABLE pendencias MODIFY COLUMN pen_solicitada_por VARCHAR(50) NULL');
   await db.query('ALTER TABLE prazos MODIFY COLUMN pra_prazo DATE NULL');
   await db.query('ALTER TABLE prazos ADD COLUMN IF NOT EXISTS pra_concluido_em DATETIME NULL');
 }
