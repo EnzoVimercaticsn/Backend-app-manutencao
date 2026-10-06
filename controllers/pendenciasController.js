@@ -277,7 +277,10 @@ async function decidirConclusao(req, res, aprovar) {
       [aprovar ? 'aprovada' : 'reprovada', req.params.id]
     );
     if (aprovar) {
-      await connection.query('UPDATE prazos SET pra_status = NULL, pra_concluido_em = COALESCE(pra_concluido_em, NOW()) WHERE pra_cod = ?', [rows[0].pra_cod]);
+      await connection.query(
+        'UPDATE prazos SET pra_status = NULL, pra_concluido_em = COALESCE(pra_concluido_em, NOW()) WHERE pra_cod = ?',
+        [rows[0].pra_cod]
+      );
     }
     await connection.commit();
     res.json({ message: aprovar ? 'Conclusão aprovada' : 'Conclusão reprovada' });

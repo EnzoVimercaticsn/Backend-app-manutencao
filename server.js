@@ -24,8 +24,7 @@ app.get('/', (req, res) => {
       '/pendencias',
       '/prazos',
       '/usuarios',
-      '/datas',
-      'POST /emails/enviar (titulo, assunto, destinatario)'
+      '/datas'
     ]
   });
 });
@@ -35,7 +34,6 @@ app.use('/pendencias', require('./routes/pendencias'));
 app.use('/prazos', require('./routes/prazos'));
 app.use('/usuarios', require('./routes/usuarios'));
 app.use('/datas', require('./routes/datas'));
-app.use('/emails', require('./routes/emails'));
 
 // Inicialização do servidor
 async function garantirColunasSolicitacao() {

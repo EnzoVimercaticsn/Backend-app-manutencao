@@ -1,7 +1,5 @@
 const db = require('../db');
-const crypto = require('crypto');
-const { promisify } = require('util');
-const scrypt = promisify(crypto.scrypt);
+const { compararSenha } = require('../utils/senhas');
 
 async function buscarUsuario(matricula) {
   if (!matricula) return null;
@@ -12,16 +10,6 @@ async function buscarUsuario(matricula) {
   );
 
   return usuarios[0] || null;
-}
-
-async function senhaValida(senha, armazenada) {
-  if (typeof senha !== 'string' || !senha) return false;
-  if (!armazenada?.startsWith('scrypt$')) return senha === armazenada;
-  const [, salt, hashHex] = armazenada.split('$');
-  if (!salt || !hashHex) return false;
-  const hash = await scrypt(senha, salt, 64);
-  const esperado = Buffer.from(hashHex, 'hex');
-  return esperado.length === hash.length && crypto.timingSafeEqual(esperado, hash);
 }
 
 exports.requireUsuarioNaoCSN = async (req, res, next) => {
@@ -61,7 +49,7 @@ exports.requireCsnPassword = async (req, res, next) => {
       [matricula]
     ))[0][0] : null;
     const empresa = String(usuario?.uso_empresa || '').toLowerCase();
-    if (!usuario || !empresa.includes('csn') || !(await senhaValida(req.body?.senha, usuario.uso_senha))) {
+    if (!usuario || !empresa.includes('csn') || !(await compararSenha(req.body?.senha, usuario.uso_senha))) {
       return res.status(403).json({ error: 'Matrícula ou senha inválida para esta operação' });
     }
     next();

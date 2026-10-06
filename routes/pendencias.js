@@ -8,11 +8,11 @@ const {
   criarPendencia,
   atualizarPendencia,
   registrarDataInicial,
-  deletarPendencia
-  , listarSolicitacoesConclusao
-  , solicitarConclusao
-  , aprovarConclusao
-  , reprovarConclusao
+  deletarPendencia,
+  listarSolicitacoesConclusao,
+  solicitarConclusao,
+  aprovarConclusao,
+  reprovarConclusao
 } = require('../controllers/pendenciasController');
 
 router.get('/', listarPendencias);
