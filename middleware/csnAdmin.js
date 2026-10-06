@@ -1,12 +1,21 @@
 const db = require('../db');
 const { compararSenha } = require('../utils/senhas');
 
+function normalizarMatricula(valor) {
+  const texto = String(valor || '').trim();
+  if (!/^\d+$/.test(texto)) return null;
+
+  const matricula = Number(texto);
+  return Number.isSafeInteger(matricula) ? matricula : null;
+}
+
 async function buscarUsuario(matricula) {
-  if (!matricula) return null;
+  const matriculaNormalizada = normalizarMatricula(matricula);
+  if (matriculaNormalizada === null) return null;
 
   const [usuarios] = await db.query(
     'SELECT uso_is_adm, uso_empresa FROM usuario WHERE uso_matric = ?',
-    [matricula]
+    [matriculaNormalizada]
   );
 
   return usuarios[0] || null;
@@ -20,7 +29,7 @@ exports.requireUsuarioNaoCSN = async (req, res, next) => {
       return res.status(403).json({ error: 'Usuários da CSN não precisam solicitar conclusão' });
     }
     req.usuario = usuario;
-    req.usuarioMatricula = req.get('x-user-matricula');
+    req.usuarioMatricula = normalizarMatricula(req.get('x-user-matricula'));
     next();
   } catch (error) {
     res.status(500).json({ error: 'Não foi possível validar o usuário', details: error.message });
