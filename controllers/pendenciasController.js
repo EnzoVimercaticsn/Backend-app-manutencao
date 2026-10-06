@@ -225,6 +225,11 @@ exports.listarSolicitacoesConclusao = async (req, res) => {
 
 exports.listarMinhasSolicitacoesConclusao = async (req, res) => {
   try {
+    const matricula = Number(req.usuarioMatricula);
+    if (!Number.isSafeInteger(matricula)) {
+      return res.status(400).json({ error: 'Matrícula inválida' });
+    }
+
     const [rows] = await db.query(
       `SELECT pen_cod, pen_local, pen_desc, pen_solicitacao_conclusao,
               pen_motivo_reprovacao, pen_solicitada_em
@@ -232,7 +237,7 @@ exports.listarMinhasSolicitacoesConclusao = async (req, res) => {
        WHERE pen_solicitada_por = ?
          AND pen_solicitacao_conclusao IN ('solicitada', 'reprovada', 'aprovada')
        ORDER BY pen_solicitada_em DESC, pen_cod DESC`,
-      [req.usuarioMatricula]
+      [matricula]
     );
     res.json(rows);
   } catch (error) {
