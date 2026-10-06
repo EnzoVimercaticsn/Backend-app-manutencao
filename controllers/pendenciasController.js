@@ -223,6 +223,23 @@ exports.listarSolicitacoesConclusao = async (req, res) => {
   }
 };
 
+exports.listarMinhasSolicitacoesConclusao = async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT pen_cod, pen_local, pen_desc, pen_solicitacao_conclusao,
+              pen_motivo_reprovacao, pen_solicitada_em
+       FROM pendencias
+       WHERE pen_solicitada_por = ?
+         AND pen_solicitacao_conclusao IN ('solicitada', 'reprovada', 'aprovada')
+       ORDER BY pen_solicitada_em DESC, pen_cod DESC`,
+      [req.usuarioMatricula]
+    );
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao listar suas solicitações', details: error.message });
+  }
+};
+
 exports.solicitarConclusao = async (req, res) => {
   const { imagemBase64 } = req.body;
   const penCod = Number(req.params.id);
