@@ -41,6 +41,7 @@ async function garantirColunasSolicitacao() {
     pendencias: {
       pen_solicitacao_conclusao: 'VARCHAR(20) NULL',
       pen_prova_conclusao: 'LONGTEXT NULL',
+      pen_motivo_reprovacao: 'VARCHAR(2000) NULL',
       pen_solicitada_por: 'INT NULL',
       pen_solicitada_em: 'DATETIME NULL'
     },

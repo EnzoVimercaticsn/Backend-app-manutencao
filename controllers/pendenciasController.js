@@ -245,6 +245,7 @@ exports.solicitarConclusao = async (req, res) => {
       `UPDATE pendencias
        SET pen_solicitacao_conclusao = 'solicitada',
            pen_prova_conclusao = ?,
+           pen_motivo_reprovacao = NULL,
            pen_solicitada_por = ?,
            pen_solicitada_em = NOW()
        WHERE pen_cod = ? AND (pen_solicitacao_conclusao IS NULL OR pen_solicitacao_conclusao = 'reprovada')`,
@@ -258,6 +259,14 @@ exports.solicitarConclusao = async (req, res) => {
 };
 
 async function decidirConclusao(req, res, aprovar) {
+  const motivo = typeof req.body?.motivo === 'string' ? req.body.motivo.trim() : '';
+  if (!aprovar && !motivo) {
+    return res.status(400).json({ error: 'Informe o motivo da reprovação' });
+  }
+  if (motivo.length > 2000) {
+    return res.status(400).json({ error: 'O motivo deve ter no máximo 2000 caracteres' });
+  }
+
   const connection = await db.getConnection();
   try {
     await connection.beginTransaction();
@@ -272,9 +281,11 @@ async function decidirConclusao(req, res, aprovar) {
 
     await connection.query(
       `UPDATE pendencias
-       SET pen_solicitacao_conclusao = ?, pen_prova_conclusao = NULL
+         SET pen_solicitacao_conclusao = ?,
+           pen_prova_conclusao = NULL,
+           pen_motivo_reprovacao = ?
        WHERE pen_cod = ?`,
-      [aprovar ? 'aprovada' : 'reprovada', req.params.id]
+        [aprovar ? 'aprovada' : 'reprovada', aprovar ? null : motivo, req.params.id]
     );
     if (aprovar) {
       await connection.query(
