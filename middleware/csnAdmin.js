@@ -1,21 +1,13 @@
 const db = require('../db');
 const { compararSenha } = require('../utils/senhas');
 
-function normalizarMatricula(valor) {
-  const texto = String(valor || '').trim();
-  if (!/^\d+$/.test(texto)) return null;
-
-  const matricula = Number(texto);
-  return Number.isSafeInteger(matricula) ? matricula : null;
-}
-
 async function buscarUsuario(matricula) {
-  const matriculaNormalizada = normalizarMatricula(matricula);
-  if (matriculaNormalizada === null) return null;
+  const valor = String(matricula ?? '').trim();
+  if (!valor) return null;
 
   const [usuarios] = await db.query(
-    'SELECT uso_is_adm, uso_empresa FROM usuario WHERE uso_matric = ?',
-    [matriculaNormalizada]
+    'SELECT uso_matric, uso_is_adm, uso_empresa FROM usuario WHERE uso_matric = ?',
+    [valor]
   );
 
   return usuarios[0] || null;
@@ -23,13 +15,18 @@ async function buscarUsuario(matricula) {
 
 exports.requireUsuarioNaoCSN = async (req, res, next) => {
   try {
-    const usuario = await buscarUsuario(req.get('x-user-matricula'));
-    if (!usuario) return res.status(401).json({ error: 'Usuário não autenticado' });
+    const matricula = req.get('x-user-matricula');
+    if (!String(matricula ?? '').trim()) {
+      return res.status(400).json({ error: 'Cabeçalho x-user-matricula ausente' });
+    }
+
+    const usuario = await buscarUsuario(matricula);
+    if (!usuario) return res.status(401).json({ error: 'Matrícula não localizada na base de usuários' });
     if (String(usuario.uso_empresa || '').toLowerCase().includes('csn')) {
       return res.status(403).json({ error: 'Usuários da CSN não precisam solicitar conclusão' });
     }
     req.usuario = usuario;
-    req.usuarioMatricula = normalizarMatricula(req.get('x-user-matricula'));
+    req.usuarioMatricula = usuario.uso_matric;
     next();
   } catch (error) {
     res.status(500).json({ error: 'Não foi possível validar o usuário', details: error.message });

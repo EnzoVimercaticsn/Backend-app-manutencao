@@ -225,8 +225,8 @@ exports.listarSolicitacoesConclusao = async (req, res) => {
 
 exports.listarMinhasSolicitacoesConclusao = async (req, res) => {
   try {
-    const matricula = Number(req.usuarioMatricula);
-    if (!Number.isSafeInteger(matricula)) {
+    const matricula = String(req.get('x-user-matricula') ?? '').trim();
+    if (!matricula) {
       return res.status(400).json({ error: 'Matrícula inválida' });
     }
 

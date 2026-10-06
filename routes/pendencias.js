@@ -18,7 +18,7 @@ const {
 
 router.get('/', listarPendencias);
 router.get('/solicitacoes-conclusao', requireCsnAdmin, listarSolicitacoesConclusao);
-router.get('/minhas-solicitacoes', requireUsuarioNaoCSN, listarMinhasSolicitacoesConclusao);
+router.get('/minhas-solicitacoes', listarMinhasSolicitacoesConclusao);
 router.get('/:id', buscarPendenciaPorId);
 router.post('/', criarPendencia);
 router.put('/:id', atualizarPendencia);

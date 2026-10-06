@@ -1,0 +1,2632 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/assets/SID-61a88c2f.png " type="image/png">
+<title>rs4</title>
+
+<style>
+/* =========================================================
+   VARIÁVEIS
+========================================================= */
+
+:root {
+    --primary: #003e7e;
+    --primary-hover: #00529f;
+    --primary-soft: #edf5fc;
+
+    --background: #f4f6f9;
+    --surface: #ffffff;
+
+    --text-primary: #172033;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+
+    --border: #e2e8f0;
+    --border-light: #edf2f7;
+
+    --success: #15803d;
+    --success-hover: #166534;
+    --success-bg: #dcfce7;
+
+    --danger: #dc2626;
+    --danger-hover: #b91c1c;
+    --danger-bg: #fee2e2;
+
+    --warning: #b45309;
+    --warning-bg: #fef3c7;
+
+    --info: #2563eb;
+    --info-bg: #dbeafe;
+
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+
+    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+
+    --header-height: 70px;
+    --sidebar-width: 230px;
+
+    --transition: 180ms ease;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    color: var(--text-primary);
+    background-color: var(--background);
+    opacity: 0;
+    animation: fadePage 400ms ease forwards;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: var(--header-height);
+    padding: 0 18px;
+
+    background-color: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(8px);
+}
+
+.header img {
+    width: auto;
+    height: 52px;
+    object-fit: contain;
+}
+
+.header h1 {
+    margin-left: 18px;
+    color: var(--primary);
+
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+
+/* =========================================================
+   BOTÕES DO HEADER
+========================================================= */
+
+#btnAdmin,
+#btnPainelAdmin,
+.btn-export {
+    min-height: 40px;
+    padding: 0 16px;
+
+    border-radius: var(--radius-md);
+
+    font-size: 0.82rem;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition:
+        color var(--transition),
+        background-color var(--transition),
+        border-color var(--transition),
+        box-shadow var(--transition),
+        transform var(--transition);
+}
+
+#btnAdmin {
+    margin-left: auto;
+
+    color: #ffffff;
+    background-color: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+#btnPainelAdmin {
+    margin-left: 10px;
+
+    color: var(--primary);
+    background-color: var(--surface);
+    border: 1px solid var(--primary);
+}
+
+#btnAdmin:hover,
+.btn-export:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+#btnPainelAdmin:hover {
+    color: #ffffff;
+    background-color: var(--primary);
+}
+
+#btnAdmin:active,
+#btnPainelAdmin:active,
+.btn-export:active {
+    transform: translateY(1px);
+}
+
+#btnAdmin:focus-visible,
+#btnPainelAdmin:focus-visible,
+.btn-export:focus-visible {
+    outline: 3px solid rgba(0, 62, 126, 0.16);
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   BOTÃO HAMBÚRGUER
+========================================================= */
+
+#menuToggle {
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    width: 42px;
+    height: 42px;
+    margin-right: 4px;
+
+    color: #ffffff;
+    background-color: var(--primary);
+    border: none;
+    border-radius: var(--radius-md);
+
+    cursor: pointer;
+    transition:
+        background-color var(--transition),
+        transform var(--transition);
+}
+
+#menuToggle:hover {
+    background-color: var(--primary-hover);
+    transform: scale(1.1);
+}
+
+#menuToggle:active {
+    transform: scale(0.96);
+}
+
+#menuToggle:focus-visible {
+    outline: 3px solid rgba(0, 62, 126, 0.18);
+    outline-offset: 2px;
+}
+
+#menuToggle span {
+    display: block;
+    width: 21px;
+    height: 2px;
+
+    background-color: #ffffff;
+    border-radius: 999px;
+
+    transition:
+        opacity 250ms ease,
+        transform 250ms ease;
+}
+
+#menuToggle.ativo span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+#menuToggle.ativo span:nth-child(2) {
+    opacity: 0;
+}
+
+#menuToggle.ativo span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.content {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    min-height: calc(100vh - var(--header-height));
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar {
+    position: sticky;
+    top: var(--header-height);
+
+    flex: 0 0 var(--sidebar-width);
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    height: calc(100vh - var(--header-height));
+    padding: 24px 16px;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    background-color: var(--surface);
+    border-right: 1px solid var(--border);
+
+    transition:
+        width 280ms ease,
+        min-width 280ms ease,
+        flex-basis 280ms ease,
+        padding 280ms ease,
+        opacity 200ms ease;
+}
+
+.sidebar.recolhido {
+    flex-basis: 0;
+    width: 0;
+    min-width: 0;
+    padding-right: 0;
+    padding-left: 0;
+
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   USUÁRIO
+========================================================= */
+
+.user-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 22px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 68px;
+    height: 68px;
+
+    color: #ffffff;
+    background-color: var(--primary);
+    border: 4px solid var(--primary-soft);
+    border-radius: 50%;
+
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.user-info {
+    margin-top: 12px;
+    text-align: center;
+}
+
+.user-info h3 {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.user-info p {
+    margin-top: 4px;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   MENU LATERAL
+========================================================= */
+
+.sidebar ul {
+    margin-top: 22px;
+}
+
+.sidebar li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    min-height: 42px;
+    margin-bottom: 4px;
+    padding: 0 12px;
+
+    list-style: none;
+    border-radius: var(--radius-md);
+
+    transition:
+        color var(--transition),
+        background-color var(--transition);
+}
+
+.sidebar li:hover {
+    background-color: var(--primary-soft);
+}
+
+.sidebar li:has(a:focus-visible) {
+    background-color: var(--primary-soft);
+    outline: 2px solid rgba(0, 62, 126, 0.16);
+}
+
+.sidebar a {
+    flex: 1;
+    color: var(--text-secondary);
+
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+
+    transition: color var(--transition);
+}
+
+.sidebar li:hover a,
+.sidebar a:hover {
+    color: var(--primary);
+}
+
+.icon-grid {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+#logoutButton {
+    width: 100%;
+    min-height: 42px;
+    margin-top: 20px;
+
+    color: var(--danger);
+    background-color: var(--surface);
+    border: 1px solid #fecaca;
+    border-radius: var(--radius-md);
+
+    font-size: 0.8rem;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition:
+        color var(--transition),
+        background-color var(--transition),
+        border-color var(--transition);
+}
+
+#logoutButton:hover {
+    color: #ffffff;
+    background-color: var(--danger);
+    border-color: var(--danger);
+}
+
+#logoutButton:focus-visible {
+    outline: 3px solid rgba(220, 38, 38, 0.15);
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   CONTEÚDO PRINCIPAL
+========================================================= */
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 24px;
+
+    overflow: visible;
+}
+
+.main-content > h1 {
+    margin-bottom: 20px;
+    color: var(--text-primary);
+
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.card {
+    width: 100%;
+    padding: 20px;
+
+    overflow: hidden;
+
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+}
+
+.card h2 {
+    margin: 0 0 18px;
+    color: var(--primary);
+
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   KPIs
+========================================================= */
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.kpi-card {
+    --kpi-color: var(--primary);
+
+    position: relative;
+    min-height: 108px;
+    padding: 18px;
+
+    overflow: hidden;
+
+    text-align: left;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+
+    cursor: pointer;
+    transition:
+        transform var(--transition),
+        border-color var(--transition),
+        box-shadow var(--transition);
+}
+
+.kpi-card::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 4px;
+    height: 100%;
+
+    content: "";
+    background-color: var(--kpi-color);
+}
+
+.kpi-card:hover,
+.kpi-card.ativo {
+    border-color: var(--kpi-color);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.kpi-card:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--kpi-color) 18%, transparent);
+    outline-offset: 2px;
+}
+
+.kpi-label {
+    display: block;
+
+    color: var(--text-muted);
+
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.kpi-value {
+    display: block;
+    margin-top: 8px;
+
+    color: var(--text-primary);
+
+    font-size: 1.85rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.kpi-hint {
+    display: block;
+    margin-top: 9px;
+
+    color: #94a3b8;
+    font-size: 0.7rem;
+}
+
+.kpi-vencido {
+    --kpi-color: var(--danger);
+}
+
+.kpi-vencendo {
+    --kpi-color: #d97706;
+}
+
+.kpi-avencer {
+    --kpi-color: var(--info);
+}
+
+.kpi-concluido {
+    --kpi-color: #16a34a;
+}
+.kpi-indefinido { --kpi-color: #7c3aed; }
+
+
+/* =========================================================
+   CABEÇALHO DA TABELA
+========================================================= */
+
+.table-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.table-heading h2 {
+    margin: 0;
+}
+
+.table-meta {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   ÁREA DE ROLAGEM DA TABELA
+========================================================= */
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+
+    scrollbar-color: #94a3b8 transparent;
+    scrollbar-width: thin;
+}
+
+
+/* =========================================================
+   TABELA
+========================================================= */
+
+table {
+    width: 100%;
+    min-width: 1200px;
+    text-align: left;
+    border-spacing: 0;
+    border-collapse: separate;
+    table-layout: auto;
+
+    color: var(--text-primary);
+}
+
+thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
+    padding: 12px 10px;
+
+    color: #ffffff;
+    background-color: var(--primary);
+    border-bottom: 1px solid var(--primary);
+
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.035em;
+    text-align: left;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+thead th:first-child {
+    padding-left: 16px;
+    border-top-left-radius: 10px;
+}
+
+thead th:last-child {
+    padding-right: 16px;
+    border-top-right-radius: 10px;
+}
+
+tbody td {
+    padding: 11px 10px;
+
+    color: var(--text-secondary);
+    background-color: var(--surface);
+    border-bottom: 1px solid var(--border-light);
+
+    font-size: 0.75rem;
+    line-height: 1.45;
+    vertical-align: middle;
+}
+
+tbody td:first-child {
+    padding-left: 16px;
+}
+
+tbody td:last-child {
+    padding-right: 16px;
+}
+
+tbody tr {
+    cursor: pointer;
+}
+
+tbody tr:nth-child(even) td {
+    background-color: #fafbfd;
+}
+
+tbody tr:hover td {
+    background-color: var(--primary-soft);
+}
+
+tbody tr:focus-within td {
+    background-color: var(--primary-soft);
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+/* Colunas com maior destaque */
+tbody td:first-child,
+tbody td:nth-child(4) {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+tbody td:nth-child(5) {
+    min-width: 220px;
+    color: #26364d;
+    font-weight: 600;
+}
+
+/* Larguras mínimas específicas */
+th:nth-child(4),
+td:nth-child(4) {
+    min-width: 120px;
+}
+
+th:nth-child(5),
+td:nth-child(5),
+th:nth-child(6),
+td:nth-child(6),
+th:nth-child(7),
+td:nth-child(7) {
+    min-width: 150px;
+}
+
+th:nth-child(8),
+td:nth-child(8) {
+    min-width: 120px;
+    white-space: nowrap;
+}
+
+th:nth-child(10),
+td:nth-child(10) {
+    min-width: 100px;
+    text-align: center;
+}
+
+.col-adiadas {
+    text-align: center;
+    white-space: normal;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 82px;
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    font-size: 0.65rem;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.vencido {
+    color: var(--danger);
+    background-color: var(--danger-bg);
+}
+
+.vencendo {
+    color: var(--warning);
+    background-color: var(--warning-bg);
+}
+
+.avencer {
+    color: var(--info);
+    background-color: var(--info-bg);
+}
+
+.concluido {
+    color: var(--success);
+    background-color: var(--success-bg);
+}
+.solicitado { color: #92400e; background-color: #fef3c7; }
+
+
+/* =========================================================
+   AÇÕES DA TABELA
+========================================================= */
+
+.acoes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 6px;
+
+    min-width: 122px;
+}
+
+.acoes button {
+    width: 100%;
+}
+
+
+/* =========================================================
+   BOTÕES DE AÇÃO
+========================================================= */
+
+.btn-concluir,
+.btn-pendente,
+.btn-editar,
+.btn-export {
+    min-height: 32px;
+    padding: 6px 12px;
+
+    border-radius: var(--radius-sm);
+
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1;
+
+    cursor: pointer;
+    transition:
+        color var(--transition),
+        background-color var(--transition),
+        border-color var(--transition),
+        box-shadow var(--transition),
+        transform var(--transition);
+}
+
+.btn-concluir,
+.btn-pendente,
+.btn-prazo {
+    color: #ffffff;
+    border: 1px solid transparent;
+}
+.btn-prazo{
+    width: 4.5vw;
+    height: 4vh;
+    border-radius: 5px;
+    font-size: 0.6rem;
+    margin-top: 1vh;
+    font-weight: 600;
+}
+.btn-concluir {
+    background-color: var(--success);
+}
+
+.btn-concluir:hover {
+    background-color: var(--success-hover);
+}
+
+.btn-pendente {
+    background-color: var(--danger);
+}
+
+.btn-pendente:hover {
+    background-color: var(--danger-hover);
+}
+
+.btn-prazo,
+.btn-export {
+    color: #ffffff;
+    background-color: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+.btn-prazo:hover,
+.btn-export:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.btn-editar {
+    display: none;
+
+    color: var(--text-secondary);
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+}
+
+.btn-editar:hover {
+    color: #1d4ed8;
+    background-color: #eff6ff;
+    border-color: #2563eb;
+}
+
+.btn-concluir:active,
+.btn-pendente:active,
+.btn-prazo:active,
+.btn-editar:active,
+.btn-export:active {
+    transform: translateY(1px);
+}
+
+.btn-concluir:focus-visible,
+.btn-pendente:focus-visible,
+.btn-prazo:focus-visible,
+.btn-editar:focus-visible,
+.btn-export:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.16);
+    outline-offset: 2px;
+}
+
+button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* =========================================================
+   FORMULÁRIO DE PENDÊNCIA
+========================================================= */
+
+.form-pendencia {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
+    gap: 18px;
+    margin-top: 16px;
+}
+
+.form-pendencia .grupo {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.form-pendencia label {
+    margin-bottom: 6px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-align: left;
+}
+
+.form-pendencia input,
+.form-pendencia select,
+.form-pendencia textarea {
+    width: 100%;
+    min-height: 42px;
+    padding: 9px 11px;
+
+    color: var(--text-primary);
+    background-color: var(--surface);
+    border: 1px solid #cbd5e1;
+    border-radius: var(--radius-md);
+    outline: none;
+
+    font-size: 0.82rem;
+
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background-color var(--transition);
+}
+
+.form-pendencia input::placeholder,
+.form-pendencia textarea::placeholder {
+    color: #94a3b8;
+}
+
+.form-pendencia input:hover,
+.form-pendencia select:hover,
+.form-pendencia textarea:hover {
+    border-color: #94a3b8;
+}
+
+.form-pendencia input:focus,
+.form-pendencia select:focus,
+.form-pendencia textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 62, 126, 0.12);
+}
+
+.form-pendencia textarea {
+    min-height: 88px;
+    max-height: 220px;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+.form-pendencia .descricao {
+    grid-column: span 1;
+}
+
+.form-pendencia .descricao-full {
+    grid-column: 1 / -1;
+}
+
+
+/* =========================================================
+   SWEETALERT2
+========================================================= */
+
+.swal2-popup {
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-xl) !important;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.16) !important;
+}
+
+.swal2-title {
+    color: var(--primary) !important;
+    font-size: 1.35rem !important;
+}
+
+.swal2-html-container {
+    color: var(--text-secondary) !important;
+    font-size: 0.88rem !important;
+}
+
+.swal2-confirm,
+.swal2-cancel,
+.swal2-deny {
+    min-height: 40px;
+    padding: 9px 18px !important;
+
+    border-radius: var(--radius-md) !important;
+
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+
+    box-shadow: none !important;
+}
+
+.swal2-confirm {
+    background-color: var(--primary) !important;
+}
+
+.swal2-confirm:hover {
+    background-color: var(--primary-hover) !important;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #aeb8c5;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background-color: #8894a3;
+    background-clip: padding-box;
+}
+
+
+/* =========================================================
+   ANIMAÇÕES
+========================================================= */
+
+@keyframes fadePage {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.header,
+.sidebar,
+.main-content h1,
+.card {
+    opacity: 0;
+    transform: translateY(18px);
+}
+
+.animar {
+    animation: slideUp 500ms ease forwards;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 300ms ease;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+
+@media (max-width: 1100px) {
+    .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .main-content {
+        padding: 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --header-height: 62px;
+    }
+
+    .header {
+        height: var(--header-height);
+        padding: 0 10px;
+    }
+
+    .header img {
+        height: 42px;
+    }
+
+    .header h1 {
+        margin-left: 10px;
+        font-size: 1rem;
+    }
+
+    #menuToggle {
+        width: 38px;
+        height: 38px;
+    }
+
+    #btnAdmin,
+    #btnPainelAdmin {
+        min-height: 36px;
+        padding: 0 10px;
+        font-size: 0.72rem;
+    }
+
+    #btnPainelAdmin {
+        margin-left: 6px;
+    }
+
+    .content {
+        display: block;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        z-index: 90;
+
+        width: min(82vw, 280px);
+        min-width: min(82vw, 280px);
+        height: calc(100vh - var(--header-height));
+
+        box-shadow: 10px 0 30px rgba(15, 23, 42, 0.14);
+    }
+
+    .sidebar.recolhido {
+        width: 0;
+        min-width: 0;
+        transform: translateX(-100%);
+    }
+
+    .main-content {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .card {
+        padding: 14px;
+        border-radius: var(--radius-lg);
+    }
+
+    .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .kpi-card {
+        min-height: 96px;
+        padding: 14px;
+    }
+
+    .kpi-value {
+        font-size: 1.55rem;
+    }
+
+    .table-heading {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    table {
+        min-width: 1100px;
+    }
+
+    .form-pendencia {
+        grid-template-columns: 1fr;
+    }
+
+    .form-pendencia .descricao,
+    .form-pendencia .descricao-full {
+        grid-column: auto;
+    }
+
+    .swal2-popup {
+        width: 94% !important;
+    }
+}
+
+@media (max-width: 520px) {
+    .header h1 {
+        max-width: 145px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .header img {
+        display: none;
+    }
+
+    #btnAdmin,
+    #btnPainelAdmin {
+        padding: 0 8px;
+    }
+
+    .kpi-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .kpi-card {
+        min-width: 0;
+    }
+
+    .kpi-label {
+        font-size: 0.62rem;
+    }
+
+    .main-content > h1 {
+        font-size: 1.25rem;
+    }
+}
+
+
+/* =========================================================
+   ACESSIBILIDADE
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    body,
+    .header,
+    .sidebar,
+    .main-content h1,
+    .card {
+        opacity: 1;
+        transform: none;
+    }
+}
+</style>
+
+
+    <link rel="stylesheet" href="../styles/menu.css">
+</head>
+
+<body>
+
+ <header class="header">
+        <img src="../assets/Marca-CSN-Azul-e-Preta-sem-Assinatura (1).png" alt="Logo"> 
+        <h1>Dashboard Manutenção</h1> 
+        <button id="btnAdmin" style="display: none;">
+    Cadastrar pêndencia
+</button>
+        <button id="btnPainelAdmin" style="display: none;" type="button">Painel ADM</button>
+    </header>
+    <div class="content">
+ <aside class="sidebar">
+    
+        <div class="brand-card">
+    <div class="user-card">
+        <div class="user-avatar" id="userAvatar"></div>
+
+        <div class="user-info">
+            <h3 id="userName"></h3>
+            <p id="userCompany"></p>
+        </div>
+        </div>
+    </div>
+    
+      <ul>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/Home.html">Dashboard</a></li>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/RS1.HTML">RS1</a></li>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/RS2.HTML">RS2</a></li>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/RS3.HTML">RS3</a></li>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/RS4.HTML">RS4</a></li>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/RS5.HTML">RS5</a></li>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/RS6.HTML">RS6</a></li>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/RS7.HTML">RS7</a></li>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/RS8.HTML">RS8</a></li>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/RS9.HTML">RS9</a></li>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/RS10.HTML">RS10</a></li>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/RS11.HTML">RS11</a></li>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/RS12.HTML">RS12</a></li>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/RC.HTML">RC</a></li>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/STE.HTML">STE</a></li>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/F.cal.HTML">F.cal</a></li>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/Sobremetal.HTML">Sobremetal</a></li>
+            <li><img src="/src/assets/layout-grid.svg" alt=""class="icon-grid"><a href="/src/html/cc.HTML">Cozinha Central</a></li>
+            <button id="logoutButton">Sair</button>
+        </ul>
+</aside>
+<main class="main-content">
+
+    <section class="kpi-grid" aria-label="Resumo de pendências">
+        <button class="kpi-card kpi-vencido" data-status-kpi="Vencido" type="button">
+            <span class="kpi-label">Vencido</span>
+            <strong class="kpi-value" id="kpiVencidors4">0</strong>
+            <span class="kpi-hint">Exige atenção imediata</span>
+        </button>
+        <button class="kpi-card kpi-vencendo" data-status-kpi="Vencendo" type="button">
+            <span class="kpi-label">Vencendo</span>
+            <strong class="kpi-value" id="kpiVencendors4">0</strong>
+            <span class="kpi-hint">Prazo nos próximos 30 dias</span>
+        </button>
+        <button class="kpi-card kpi-avencer" data-status-kpi="A vencer" type="button">
+            <span class="kpi-label">A vencer</span>
+            <strong class="kpi-value" id="kpiAvencerrs4">0</strong>
+            <span class="kpi-hint">Dentro do prazo</span>
+        </button>
+        <button class="kpi-card kpi-concluido" data-status-kpi="Concluído" type="button">
+            <span class="kpi-label">Concluído</span>
+            <strong class="kpi-value" id="kpiConcluidors4">0</strong>
+            <span class="kpi-hint">Pendências finalizadas</span>
+        </button>
+        <button class="kpi-card kpi-indefinido" data-status-kpi="Á definir" type="button"><span class="kpi-label">À definir</span><strong class="kpi-value" id="kpiIndefinidors4">0</strong><span class="kpi-hint">Sem prazo informado</span></button>
+    </section>
+
+    <div class="card">
+        
+        <div class="table-heading">
+            <h2>Pendências rs4</h2>
+            <span class="table-meta" id="totalFiltradors4">0 registros</span>
+        </div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px;">
+            <input id="buscarDescricaors4" type="text" placeholder="Buscar por descrição" style="padding:8px 10px; border:1px solid #d0d7de; border-radius:8px; min-width:240px;">
+            <select id="filtroStatusrs4" style="padding:8px 10px; border:1px solid #d0d7de; border-radius:8px;">
+                <option value="todos">Todos os status</option>
+                <option value="Vencido">Vencido</option>
+                <option value="Vencendo">Vencendo</option>
+                <option value="A vencer">A vencer</option>
+                <option value="Á definir">Á definir</option>
+                <option value="Concluído">Concluído</option>
+            </select>
+            <select id="filtroArears4" style="padding:8px 10px; border:1px solid #d0d7de; border-radius:8px; min-width:180px;">
+                <option value="todos">Todas as áreas</option>
+            </select>
+        </div>
+        <div class="table-wrapper">
+    
+        <table>
+
+      <thead>
+<tr>
+    <th>LOCAL</th>
+    <th>DATA INICIAL</th>
+    <th>DATA VERIFICAÇÃO</th>
+    <th>ÁREA</th>
+    <th>DESCRIÇÃO</th>
+    <th>MATRIZ <br> RESPONSABILIDADE</th>
+    <th>DESCUMPRIMENTO</th>
+    <th>PRAZO</th>
+    <th>RESPONSÁVEL</th>
+    <th>STATUS</th>
+    <th>VEZES <p></p> ADIADAS</th>
+    <th>AÇÕES</th>
+</tr>
+</thead>
+            <tbody id="tbodyrs4">
+
+            </tbody>
+
+        </table>
+    </div>
+    </div>
+
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="/src/js/export.js"></script>
+<script src="/src/js/devolutivaConclusao.js"></script>
+<script>
+    
+let filtrosrs4 = {
+    termo: "",
+    status: "todos",
+    area: "todos"
+};
+
+function aplicarFiltrosrs4(dados) {
+    const termo = filtrosrs4.termo.trim().toLowerCase();
+
+    return dados.filter(item => {
+        const descricaoOk = !termo || (item.pendencia.pen_desc || "").toLowerCase().includes(termo);
+        const statusOk = filtrosrs4.status === "todos" || item.status === filtrosrs4.status;
+        const areaOk = filtrosrs4.area === "todos" || item.pendencia.pen_area === filtrosrs4.area;
+
+        return descricaoOk && statusOk && areaOk;
+    });
+}
+
+function atualizarKPIsrs4(dados) {
+    const totais = dados.reduce((contagem, item) => {
+        contagem[item.status] = (contagem[item.status] || 0) + 1;
+        return contagem;
+    }, {});
+
+    document.getElementById("kpiVencidors4").textContent = totais["Vencido"] || 0;
+    document.getElementById("kpiVencendors4").textContent = totais["Vencendo"] || 0;
+    document.getElementById("kpiAvencerrs4").textContent = totais["A vencer"] || 0;
+    document.getElementById("kpiConcluidors4").textContent = totais["Concluído"] || 0;
+    document.getElementById("kpiIndefinidors4").textContent = totais["Á definir"] || 0;
+}
+
+function preencherAreasrs4(dados) {
+    const selectArea = document.getElementById("filtroArears4");
+    const areaAtual = filtrosrs4.area;
+    const areas = [...new Set(
+        dados
+            .map(item => (item.pendencia.pen_area || "").trim())
+            .filter(area => area)
+    )].sort((a, b) => a.localeCompare(b, "pt-BR"));
+
+    selectArea.innerHTML = '<option value="todos">Todas as áreas</option>' +
+        areas.map(area => `<option value="${area.replace(/"/g, '&quot;')}">${area}</option>`).join("");
+
+    if (areas.includes(areaAtual)) {
+        selectArea.value = areaAtual;
+    } else {
+        filtrosrs4.area = "todos";
+        selectArea.value = "todos";
+    }
+}
+
+async function carregarTabelars4() {
+
+    try {
+
+        const [pendenciasResponse, prazosResponse] =
+            await Promise.all([
+                fetch("https://backend-app-manutencao.vercel.app/pendencias"),
+                fetch("https://backend-app-manutencao.vercel.app/prazos")
+            ]);
+
+        const pendencias =
+            await pendenciasResponse.json();
+
+        const prazos =
+            await prazosResponse.json();
+
+        const hoje = new Date();
+
+        function eDataIndefinida(valor) {
+            if (valor === null || valor === undefined || valor === "") {
+                return true;
+            }
+
+            const data = new Date(valor);
+
+            if (Number.isNaN(data.getTime())) {
+                return true;
+            }
+
+            return data.getFullYear() <= 1900;
+        }
+
+        function formatarDataParaExibicao(valor) {
+            if (eDataIndefinida(valor)) {
+                return "Á definir";
+            }
+
+            const data = new Date(valor);
+
+            return data.toLocaleDateString("pt-BR");
+        }
+
+        const dados = pendencias
+
+            .filter(p => String(p.pen_local || "").toLowerCase() === "rs4")
+
+            .map(pendencia => {
+
+                const prazo = prazos.find(
+                    p =>
+                        Number(p.pra_cod) ===
+                        Number(pendencia.pra_cod)
+                );
+
+                if (!prazo) return null;
+                Object.assign(prazo, { pen_cod: pendencia.pen_cod, pen_data_inicial: pendencia.pen_data_inicial });
+
+               const dataPrazo = new Date(prazo.pra_prazo);
+
+                let status = "";
+                let classe = "";
+                let prioridade = 0;
+
+                if (prazo.pra_status === null) {
+
+                    status = "Concluído";
+                    classe = "concluido";
+
+                    prioridade = 9999;
+
+                } else if (pendencia.pen_solicitacao_conclusao === "solicitada") {
+                    status = "Solicitação pendente";
+                    classe = "solicitado";
+                    prioridade = 9998;
+                } else if (eDataIndefinida(prazo.pra_prazo)) {
+
+                    status = "Á definir";
+                    classe = "ndefinido";
+                    prioridade = 9999;
+
+                } else {
+
+                    const diferencaDias =
+                        Math.floor(
+                            (dataPrazo - hoje) /
+                            (1000 * 60 * 60 * 24)
+                        );
+
+                    if (diferencaDias < 0) {
+
+                        status = "Vencido";
+                        classe = "vencido";
+
+                        prioridade = 1;
+
+                    }
+                    else if (diferencaDias <= 30) {
+
+                        status = "Vencendo";
+                        classe = "vencendo";
+
+                        prioridade = 2;
+
+                    }
+                    else {
+
+                        status = "A vencer";
+                        classe = "avencer";
+
+                        prioridade = 3;
+                    }
+                }
+
+                return {
+                    pendencia,
+                    prazo,
+                    status,
+                    classe,
+                    prioridade,
+                    dataPrazo
+                };
+
+            })
+
+            .filter(item => item !== null)
+
+            .sort((a, b) => {
+
+                if (a.prioridade !== b.prioridade) {
+                    return a.prioridade - b.prioridade;
+                }
+
+                if (a.prioridade === 9999) {
+                    return 0;
+                }
+
+                return a.dataPrazo - b.dataPrazo;
+
+            });
+
+        const tbody =
+            document.getElementById("tbodyrs4");
+
+        preencherAreasrs4(dados);
+        const dadosFiltrados = aplicarFiltrosrs4(dados);
+        atualizarKPIsrs4(dadosFiltrados);
+
+        document.getElementById("totalFiltradors4").textContent =
+            `${dadosFiltrados.length} ${dadosFiltrados.length === 1 ? "registro" : "registros"}`;
+
+        tbody.innerHTML = "";
+
+        dadosFiltrados.forEach(item => {
+
+            const {
+                pendencia,
+                prazo,
+                status,
+                classe
+            } = item;
+
+          tbody.innerHTML += `
+<tr
+    data-tipo="rs4"
+    data-local="${(pendencia.pen_local || '').replace(/"/g, '&quot;')}"
+    data-pen-cod="${pendencia.pen_cod || ''}"
+    data-data-inicial="${pendencia.pen_data_inicial || ''}"
+    data-data-verificacao="${pendencia.pen_data_da_verifi || ''}"
+    data-area="${(pendencia.pen_area || '').replace(/"/g, '&quot;')}"
+    data-descricao="${(pendencia.pen_desc || '').replace(/"/g, '&quot;')}"
+    data-item="${(pendencia.pen_item_con || '').replace(/"/g, '&quot;')}"
+    data-legislacao="${(pendencia.pen_descumprimento_legis || '').replace(/"/g, '&quot;')}"
+    data-prazo="${formatarDataParaExibicao(prazo.pra_prazo)}"
+    data-prazo-valor="${prazo.pra_prazo || ''}"
+    data-pra-cod="${prazo.pra_cod || ''}"
+    data-responsavel="${(prazo.pra_responsavel || '').replace(/"/g, '&quot;')}"
+    data-status="${(status || '').replace(/"/g, '&quot;')}"
+    title="Clique para ver detalhes"
+>
+
+  <td>${pendencia.pen_local}</td>
+
+
+
+<td>
+${
+    pendencia.pen_data_inicial
+    ? formatarDataParaExibicao(pendencia.pen_data_inicial)
+    : "-"
+}
+</td>
+
+<td>
+${
+    pendencia.pen_data_da_verifi
+    ? formatarDataParaExibicao(pendencia.pen_data_da_verifi)
+    : "-"
+}
+</td>
+    <td>${pendencia.pen_area}</td>
+
+    <td>${pendencia.pen_desc}</td>
+
+    <td>${pendencia.pen_item_con}</td>
+
+    <td>${pendencia.pen_descumprimento_legis}</td>
+
+    <td>
+        ${formatarDataParaExibicao(prazo.pra_prazo)}
+    </td>
+
+    <td>${prazo.pra_responsavel}</td>
+
+    <td>
+        <span class="status ${classe}">
+            ${status}
+        </span>
+    </td>
+
+    <td>${prazo.pra_vezes_adi}</td>
+
+    <td>
+
+        <button
+            class="btn-editar"
+            onclick="abrirDetalhesPendenciars4(this.closest('tr'))"
+        >
+            Editar
+        </button>
+
+        ${renderizarAcaoConclusao(pendencia, prazo)}
+
+        <button
+            class="btn-concluir btn-concluir-direto"
+            style="display: ${usuarioEhCSN() ? 'block' : 'none'}"
+            onclick="alterarStatus(
+                ${prazo.pra_cod},
+                ${JSON.stringify(prazo).replace(/"/g,"&quot;")}
+            )"
+        >
+            ${
+                prazo.pra_status === null
+                    ? "Marcar Pendente"
+                    : "Concluir"
+            }
+        </button>
+
+        <button
+            class="btn-prazo"
+            onclick="alterarPrazo(
+                ${prazo.pra_cod},
+                ${JSON.stringify(prazo).replace(/"/g,"&quot;")}
+            )"
+        >
+            Alterar Prazo
+        </button>
+
+    </td>
+
+</tr>
+`;
+        });
+
+    }
+    catch (erro) {
+
+        console.error(
+            "Erro ao carregar rs4:",
+            erro
+        );
+    }
+}
+
+function abrirDetalhesPendenciars4(row) {
+    const local = row.dataset.local || "-";
+    const dataInicial = row.dataset.dataInicial || "-";
+    const dataVerificacao = row.dataset.dataVerificacao || "-";
+    const area = row.dataset.area || "-";
+    const descricao = row.dataset.descricao || "-";
+    const item = row.dataset.item || "-";
+    const legislacao = row.dataset.legislacao || "-";
+    const prazo = row.dataset.prazo || "-";
+    const responsavel = row.dataset.responsavel || "-";
+    const status = row.dataset.status || "-";
+
+    Swal.fire({
+        title: `${local} - ${status}`,
+        html: `
+            <div style="text-align:left; line-height:1.7;">
+                <p><strong>Local:</strong> ${local}</p>
+                <p><strong>Data inicial:</strong> ${dataInicial}</p>
+                <p><strong>Data de verificação:</strong> ${dataVerificacao}</p>
+                <p><strong>Área:</strong> ${area}</p>
+                <p><strong>Descrição:</strong> ${descricao}</p>
+                <p><strong>Matriz de responsabilidade:</strong> ${item}</p>
+                <p><strong>Descumprimento/Legislação:</strong> ${legislacao}</p>
+                <p><strong>Prazo:</strong> ${prazo}</p>
+                <p><strong>Responsável:</strong> ${responsavel}</p>
+                <p><strong>Status:</strong> ${status}</p>
+            </div>
+        `,
+        showConfirmButton: usuarioEhCSN(),
+        showCancelButton: true,
+        showDenyButton: usuarioEhCSN(),
+        denyButtonText: "Apagar",
+        confirmButtonText: "Editar campos",
+        cancelButtonText: "Fechar",
+        width: "650px"
+    }).then(resultado => {
+        if (resultado.isDenied) confirmarExclusaoPendencia(row);
+        if (resultado.isConfirmed) {
+            editarPendenciars4(row);
+        }
+    });
+}
+
+async function editarPendenciars4(row) {
+    if (!usuarioEhCSN()) {
+        Swal.fire({ icon: "error", title: "Acesso negado", text: "Somente usuários da CSN podem editar pendências." });
+        return;
+    }
+
+    const resultado = await Swal.fire({
+        title: "Editar pendência",
+        width: "760px",
+        showCancelButton: true,
+        confirmButtonText: "Salvar alterações",
+        cancelButtonText: "Cancelar",
+        html: `
+            <div class="form-pendencia">
+                <div class="grupo"><label>Local</label><input id="edit-local" type="text"></div>
+                <div class="grupo"><label>Área</label><input id="edit-area" type="text"></div>
+                <div class="grupo"><label>Data inicial</label><input id="edit-data-inicial" type="date"></div>
+                <div class="grupo"><label>Data de verificação</label><input id="edit-data-verificacao" type="date"></div>
+                <div class="grupo"><label>Prazo</label><input id="edit-prazo" type="date"></div>
+                <div class="grupo"><label>Responsável</label><input id="edit-responsavel" type="text"></div>
+                <div class="grupo descricao-full"><label>Descrição</label><textarea id="edit-descricao"></textarea></div>
+                <div class="grupo descricao-full"><label>Matriz de responsabilidade</label><textarea id="edit-item"></textarea></div>
+                <div class="grupo descricao-full"><label>Descumprimento / Legislação</label><textarea id="edit-legislacao"></textarea></div>
+            </div>
+        `,
+        didOpen: () => {
+            document.getElementById("edit-local").value = row.dataset.local || "";
+            document.getElementById("edit-area").value = row.dataset.area || "";
+            document.getElementById("edit-data-inicial").value = row.dataset.dataInicial || "";
+            document.getElementById("edit-data-verificacao").value = row.dataset.dataVerificacao || "";
+            document.getElementById("edit-prazo").value = (row.dataset.prazoValor || "").split("T")[0];
+            document.getElementById("edit-responsavel").value = row.dataset.responsavel || "";
+            document.getElementById("edit-descricao").value = row.dataset.descricao || "";
+            document.getElementById("edit-item").value = row.dataset.item || "";
+            document.getElementById("edit-legislacao").value = row.dataset.legislacao || "";
+        },
+        preConfirm: () => {
+            const valor = id => document.getElementById(id).value.trim();
+            const campos = {
+                local: valor("edit-local"),
+                area: valor("edit-area"),
+                dataInicial: valor("edit-data-inicial"),
+                dataVerificacao: valor("edit-data-verificacao"),
+                prazo: valor("edit-prazo"),
+                responsavel: valor("edit-responsavel"),
+                descricao: valor("edit-descricao"),
+                item: valor("edit-item"),
+                legislacao: valor("edit-legislacao")
+            };
+
+            if (!campos.local || !campos.area || !campos.dataInicial || !campos.prazo || !campos.responsavel || !campos.descricao) {
+                Swal.showValidationMessage("Preencha os campos obrigatórios.");
+                return false;
+            }
+
+            return campos;
+        }
+    });
+
+    if (!resultado.isConfirmed) return;
+
+    try {
+        const dados = resultado.value;
+        const [pendenciaResponse, prazoResponse] = await Promise.all([
+            fetch(`https://backend-app-manutencao.vercel.app/pendencias/${row.dataset.penCod}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    pen_local: dados.local,
+                    pen_data_inicial: dados.dataInicial,
+                    pen_data_da_verifi: dados.dataVerificacao || null,
+                    pen_area: dados.area,
+                    pen_desc: dados.descricao,
+                    pen_item_con: dados.item,
+                    pen_descumprimento_legis: dados.legislacao,
+                    pra_cod: Number(row.dataset.praCod)
+                })
+            }),
+            fetch(`https://backend-app-manutencao.vercel.app/prazos/${row.dataset.praCod}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    pra_prazo: dados.prazo,
+                    pra_observacao: "",
+                    pra_responsavel: dados.responsavel,
+                    pra_status: row.dataset.status === "Concluído" ? null : 1,
+                    pra_vezes_adi: Number(row.querySelector("td:nth-child(11)")?.textContent.trim() || 0)
+                })
+            })
+        ]);
+
+        if (!pendenciaResponse.ok || !prazoResponse.ok) throw new Error("Falha ao salvar os dados");
+
+        await Swal.fire({ icon: "success", title: "Alterações salvas" });
+        carregarTabelars4();
+    } catch (erro) {
+        console.error("Erro ao editar pendência:", erro);
+        Swal.fire({ icon: "error", title: "Erro", text: "Não foi possível salvar as alterações." });
+    }
+}
+
+function aplicarBuscaInicialNaUrl() {
+    const termo = new URLSearchParams(window.location.search).get("search");
+
+    if (termo) {
+        filtrosrs4.termo = termo;
+        document.getElementById("buscarDescricaors4").value = termo;
+    }
+
+    carregarTabelars4().then(() => {
+        if (!termo) return;
+
+        const linha = [...document.querySelectorAll('tr[data-tipo="rs4"]')]
+            .find(elemento => (elemento.dataset.descricao || "")
+                .toLowerCase().includes(termo.toLowerCase()));
+
+        if (linha) {
+            linha.scrollIntoView({ behavior: "smooth", block: "center" });
+            linha.style.background = "#dbeafe";
+            setTimeout(() => linha.style.background = "", 1800);
+        }
+    });
+}
+
+document.getElementById("buscarDescricaors4").addEventListener("input", (event) => {
+    filtrosrs4.termo = event.target.value;
+    carregarTabelars4();
+});
+
+document.getElementById("filtroStatusrs4").addEventListener("change", (event) => {
+    filtrosrs4.status = event.target.value;
+    document.querySelectorAll("[data-status-kpi]").forEach(item => {
+        item.classList.toggle("ativo", item.dataset.statusKpi === filtrosrs4.status);
+    });
+    carregarTabelars4();
+});
+
+document.getElementById("filtroArears4").addEventListener("change", (event) => {
+    filtrosrs4.area = event.target.value;
+    carregarTabelars4();
+});
+
+document.querySelectorAll("[data-status-kpi]").forEach(kpi => {
+    kpi.addEventListener("click", () => {
+        const status = kpi.dataset.statusKpi;
+        filtrosrs4.status = filtrosrs4.status === status ? "todos" : status;
+        document.getElementById("filtroStatusrs4").value = filtrosrs4.status;
+        document.querySelectorAll("[data-status-kpi]").forEach(item => {
+            item.classList.toggle("ativo", item.dataset.statusKpi === filtrosrs4.status);
+        });
+        carregarTabelars4();
+    });
+});
+
+document.getElementById("tbodyrs4").addEventListener("click", (event) => {
+    const linha = event.target.closest("tr[data-tipo='rs4']");
+
+    if (!linha || event.target.closest("button")) {
+        return;
+    }
+
+    abrirDetalhesPendenciars4(linha);
+});
+
+aplicarBuscaInicialNaUrl();
+/* =========================
+   USUÁRIO
+========================= */
+
+const userData = JSON.parse(
+    localStorage.getItem("login") || "null"
+);
+
+if (!userData) {
+
+    Swal.fire({
+        icon: "error",
+        title: "Sessão expirada",
+        text: "Faça login novamente."
+    }).then(() => {
+
+        window.location.href = "/index.html";
+
+    });
+
+} else {
+
+    document.getElementById("userName").textContent =
+        userData.uso_nome;
+
+    document.getElementById("userCompany").textContent =
+        userData.uso_empresa;
+
+    const avatar = document.getElementById("userAvatar");
+    avatar.textContent = userData.uso_nome.charAt(0).toUpperCase();
+    const cores = ["#4B99FC", "#2ECC71", "#9B59B6", "#E74C3C", "#1ABC9C", "#34495E", "#D35400", "#2980B9",
+        "#8E44AD",
+        "#16A085"
+    ];
+
+    const corAvatar = sessionStorage.getItem("alimentacao-avatar-cor") || cores[Math.floor(Math.random() * cores.length)];
+    sessionStorage.setItem("alimentacao-avatar-cor", corAvatar);
+    avatar.style.backgroundColor = corAvatar;
+
+    const empresa =
+        userData.uso_empresa?.toLowerCase() || "";
+
+    const btnAdmin =
+        document.getElementById("btnAdmin");
+
+    const btnPainelAdmin = document.getElementById("btnPainelAdmin");
+
+    const ehAdministrador = [true, 1, "1", "true"].includes(userData.uso_is_adm);
+
+    if (ehAdministrador) {
+        btnPainelAdmin.style.display = "block";
+        btnPainelAdmin.addEventListener("click", () => {
+            window.location.href = "/src/html/admin.html";
+        });
+    }
+
+    if (empresa.includes("csn")) {
+
+        btnAdmin.style.display = "block";
+
+        btnAdmin.addEventListener(
+            "click",
+            abrirModalPendencia
+        );
+
+    } else {
+
+        btnAdmin.style.display = "none";
+    }
+}
+
+/* =========================
+   LOGOUT
+========================= */
+
+document
+.getElementById("logoutButton")
+.addEventListener("click", () => {
+
+    localStorage.removeItem("login");
+
+    window.location.href = "/index.html";
+});
+
+/* =========================
+   PERMISSÃO
+========================= */
+
+function usuarioEhCSN() {
+
+    return (
+        userData &&
+        userData.uso_empresa &&
+        userData.uso_empresa
+            .toLowerCase()
+            .includes("csn")
+    );
+}
+function renderizarAcaoConclusao(pendencia, prazo) {
+    if (usuarioEhCSN()) return `<button class="btn-concluir" onclick="alterarStatus(${prazo.pra_cod}, ${JSON.stringify(prazo).replace(/"/g, '&quot;')})">${prazo.pra_status === null ? "Marcar Pendente" : "Concluir"}</button>`;
+    const feedback = renderizarFeedbackConclusao(pendencia, prazo);
+    if (feedback) return feedback;
+    if (prazo.pra_status === null) return "";
+    if (pendencia.pen_solicitacao_conclusao === "solicitada") return '<button class="btn-concluir" disabled>Solicitação enviada</button>';
+    return `<button class="btn-concluir" onclick="solicitarConclusao(${pendencia.pen_cod})">Solicitar conclusão</button>`;
+}
+async function solicitarConclusao(penCod) { const resultado = await Swal.fire({ title: "Solicitar conclusão", input: "file", inputAttributes: { accept: "image/*" }, showCancelButton: true, confirmButtonText: "Enviar solicitação", cancelButtonText: "Cancelar", inputValidator: arquivo => arquivo ? undefined : "Selecione uma imagem." }); if (!resultado.isConfirmed) return; const arquivo = resultado.value; if (arquivo.size > 10 * 1024 * 1024) return Swal.fire({ icon: "error", title: "Imagem muito grande", text: "A imagem deve ter no máximo 10 MB." }); const imagemBase64 = await new Promise((resolve, reject) => { const leitor = new FileReader(); leitor.onload = () => resolve(leitor.result); leitor.onerror = reject; leitor.readAsDataURL(arquivo); }); const resposta = await fetch(`https://backend-app-manutencao.vercel.app/pendencias/${penCod}/solicitar-conclusao`, { method: "POST", headers: { "Content-Type": "application/json", "x-user-matricula": String(userData.uso_matric) }, body: JSON.stringify({ imagemBase64 }) }); if (!resposta.ok) throw new Error(await resposta.text()); await Swal.fire({ icon: "success", title: "Solicitação enviada" }); carregarTabelaRS4(); }
+async function alterarStatus(id, prazo) {
+
+    if (!usuarioEhCSN()) {
+
+        Swal.fire({
+            icon: "error",
+            title: "Acesso negado",
+            text: "Somente usuários da CSN podem alterar status."
+        });
+
+        return;
+    }
+
+    try  {
+
+        const novoStatus =
+            prazo.pra_status === null
+                ? 1
+                : null;
+
+        await fetch(
+            `https://backend-app-manutencao.vercel.app/prazos/${id}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+
+                    pra_prazo:
+                        prazo.pra_prazo,
+
+                    pra_observacao:
+                        prazo.pra_observacao,
+
+                    pra_responsavel:
+                        prazo.pra_responsavel,
+
+                    pra_status:
+                        novoStatus,
+
+                    pra_vezes_adi:
+                        prazo.pra_vezes_adi
+                })
+            }
+        );
+
+        await Swal.fire({
+            icon: "success",
+            title:
+                novoStatus === null
+                    ? "Pendência concluída"
+                    : "Pendência reaberta"
+        });
+
+        carregarTabelars4();
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        Swal.fire({
+            icon: "error",
+            title: "Erro",
+            text: "Não foi possível atualizar o status."
+        });
+    }
+}
+async function alterarPrazo(id, prazo) {
+    if (!userData) {
+        Swal.fire({ icon: "error", title: "Acesso negado", text: "Faça login para alterar o prazo." });
+        return;
+    }
+
+    const resultado = await Swal.fire({
+
+        title: "Alterar Prazo",
+
+        icon: "warning",
+
+        html: `
+        <div style="text-align:center;">
+
+            <label style="
+                display:block;
+                margin-bottom:10px;
+                font-weight:600;
+                font-size:15px;
+            ">
+                Novo Prazo
+            </label>
+
+            <input
+                type="date"
+                id="novoPrazo"
+                value="${prazo.pra_prazo && new Date(prazo.pra_prazo).getFullYear() > 1900 ? prazo.pra_prazo.split("T")[0] : new Date().toISOString().split("T")[0]}"
+                style="
+                    width:220px;
+                    padding:10px;
+                    border:1px solid #d1d5db;
+                    border-radius:8px;
+                    font-size:14px;
+                    display:block;
+                    margin:0 auto;
+                "
+            >
+
+            <div style="
+                margin-top:20px;
+                padding:12px;
+                border-radius:8px;
+                background:#fff3cd;
+                border:1px solid #ffe69c;
+                color:#856404;
+                font-size:14px;
+                text-align:left;
+            ">
+                ⚠️ <strong>Atenção</strong><br><br>
+
+                Ao confirmar esta alteração, o campo
+                <strong>Vezes Adiadas</strong>
+                será incrementado automaticamente em
+                <strong>+1</strong>.
+            </div>
+
+        </div>
+        `,
+
+        showCancelButton: true,
+
+        confirmButtonText: "Salvar Novo Prazo",
+
+        cancelButtonText: "Cancelar",
+
+        preConfirm: () => {
+
+            const novoPrazo =
+                document.getElementById("novoPrazo").value;
+
+            if (!novoPrazo) {
+
+                Swal.showValidationMessage(
+                    "Selecione uma data."
+                );
+
+                return false;
+            }
+
+            return novoPrazo;
+        }
+    });
+
+    if (!resultado.isConfirmed) return;
+
+    try {
+
+        const novoPrazo = resultado.value;
+        const vezesAdiadas =
+            Number(prazo.pra_vezes_adi || 0) + 1;
+        const resposta = await fetch(`https://backend-app-manutencao.vercel.app/prazos/${id}/com-historico`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pen_cod: prazo.pen_cod, pra_prazo: novoPrazo, pra_observacao: prazo.pra_observacao, pra_responsavel: prazo.pra_responsavel, pra_status: prazo.pra_status, pra_vezes_adi: vezesAdiadas, dat_alterado_por: userData.uso_nome }) });
+        if (!resposta.ok) throw new Error(await resposta.text());
+
+        await Swal.fire({
+            icon: "success",
+            title: "Prazo atualizado",
+            text: "O prazo foi alterado e salvo no histórico."
+        });
+
+        carregarTabelars4();
+
+    } catch (erro) {
+
+        console.error("Erro ao alterar prazo:", erro);
+
+        Swal.fire({
+            icon: "error",
+            title: "Erro",
+            text: "Não foi possível alterar o prazo."
+        });
+    }
+}
+
+async function abrirModalPendencia() {
+
+    if (!usuarioEhCSN()) {
+
+        Swal.fire({
+            icon: "error",
+            title: "Acesso negado",
+            text: "Somente usuários da CSN podem cadastrar pendências."
+        });
+
+        return;
+    }
+
+    const resultado = await Swal.fire({
+
+        title: "Nova Pendência",
+
+        width: "1100px",
+
+        showCancelButton: true,
+        confirmButtonText: "Salvar Pendência",
+        cancelButtonText: "Cancelar",
+
+        html: `
+        <div class="form-pendencia">
+
+            <div class="grupo">
+                <label>Local</label>
+                <select id="swal-local">
+                    <option>RS1</option>
+                    <option>RS2</option>
+                    <option>RS3</option>
+                    <option>RS4</option>
+                    <option>RS5</option>
+                    <option>RS6</option>
+                    <option>RS7</option>
+                    <option>RS8</option>
+                    <option>RS9</option>
+                    <option>RS10</option>
+                    <option>RS11</option>
+                    <option>RS12</option>
+                    <option>RC</option>
+                    <option>STE</option>
+                    <option>F.cal</option>
+                    <option>Sobremetal</option>
+                </select>
+            </div>
+
+            <div class="grupo">
+                <label>Área</label>
+
+                <select id="swal-area">
+
+                    <option value="">Selecione</option>
+
+                    <option>Salão</option>
+                    <option>Área de cocção</option>
+                    <option>Área de higienização de utensílios</option>
+                    <option>Área de higienização de mãos</option>
+                    <option>Vestiário Feminino</option>
+                    <option>Vestiário Masculino</option>
+                    <option>Banheiro Feminino</option>
+                    <option>Banheiro Masculino</option>
+                    <option>Banheiro Feminino Clientes</option>
+                    <option>Banheiro Masculino Clientes</option>
+                    <option>Vestiário Feminino Funcionários</option>
+                    <option>Vestiário Masculino Funcionários</option>
+                    <option>Estoque Químico</option>
+                    <option>Estoque Seco</option>
+                    <option>Estoque de Alimentos</option>
+                    <option>Área Externa</option>
+                    <option>Área de Recebimentos</option>
+                    <option>Área de abastecimento</option>
+                    <option>Sala da gerente</option>
+                    <option>Corredor / Corredor vestiário</option>
+                    <option>Escritório</option>
+                    <option>Cocção</option>
+                    <option>Higienização de mãos</option>
+                    <option>Higienização de Utensílios</option>
+                    <option>Vestiário Funcionários</option>
+                    <option>Açougue</option>
+                    <option>Área de Seleção de Grãos</option>
+                    <option>Câmaras Frias</option>
+                    <option>Copa</option>
+                    <option>HortiFruti</option>
+                    <option>Padaria</option>
+                    <option>Sala dos nutricionistas</option>
+
+                </select>
+            </div>
+
+            <div class="grupo">
+                <label>Data de verificação</label>
+                <input type="date" id="swal-verificacao">
+            </div>
+
+            <div class="grupo">
+                <label>Prazo</label>
+                <input type="date" id="swal-prazo">
+                <label><input type="checkbox" id="swal-prazo-indefinido"> Prazo à definir</label>
+            </div>
+
+            <div class="grupo">
+                <label>Responsável</label>
+                <input type="text" id="swal-responsavel">
+            </div>
+
+            <div class="grupo descricao">
+                <label>Descrição</label>
+                <textarea id="swal-descricao"></textarea>
+            </div>
+
+            <div class="grupo descricao">
+                <label>Item Contratual</label>
+                <textarea id="swal-item"></textarea>
+            </div>
+
+            <div class="grupo descricao">
+                <label>Descumprimento / Legislação</label>
+                <textarea id="swal-descumprimento"></textarea>
+            </div>
+
+        </div>
+        `,
+
+        preConfirm: () => {
+
+            const local =
+                document.getElementById("swal-local").value;
+
+            const area =
+                document.getElementById("swal-area").value;
+
+            const prazo =
+                document.getElementById("swal-prazo").value;
+            const prazoIndefinido = document.getElementById("swal-prazo-indefinido").checked;
+            const verificacao = document.getElementById("swal-verificacao").value;
+
+            const responsavel =
+                document.getElementById("swal-responsavel").value;
+
+            const descricao =
+                document.getElementById("swal-descricao").value;
+
+            const itemConforme =
+                document.getElementById("swal-item").value;
+
+            const descumprimento =
+                document.getElementById("swal-descumprimento").value;
+
+            if (
+                !local ||
+                !area ||
+                (!prazo && !prazoIndefinido) ||
+                !verificacao ||
+                !responsavel ||
+                !descricao
+            ) {
+
+                Swal.showValidationMessage(
+                    "Preencha todos os campos obrigatórios."
+                );
+
+                return false;
+            }
+
+            return {
+                local,
+                area,
+                prazo: prazoIndefinido ? null : prazo,
+                verificacao,
+                responsavel,
+                descricao,
+                itemConforme,
+                descumprimento
+            };
+        }
+    });
+
+    if (!resultado.isConfirmed) return;
+
+    try {
+
+        const dados = resultado.value;
+
+        const prazoResponse = await fetch(
+            "https://backend-app-manutencao.vercel.app/prazos",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+
+                    pra_prazo: dados.prazo,
+
+                    pra_observacao: "",
+
+                    pra_responsavel: dados.responsavel,
+
+                    pra_status: 1,
+
+                    pra_vezes_adi: 0
+                })
+            }
+        );
+
+        const prazoCriado =
+            await prazoResponse.json();
+
+        const pra_cod =
+            prazoCriado.id || prazoCriado.pra_cod;
+
+        await fetch(
+            "https://backend-app-manutencao.vercel.app/pendencias",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    pen_local:
+                        dados.local,
+
+
+                    pen_data_da_verifi: dados.verificacao,
+
+                    pen_area:
+                        dados.area,
+
+                    pen_desc:
+                        dados.descricao,
+
+                    pen_item_con:
+                        dados.itemConforme,
+
+                    pen_descumprimento_legis:
+                        dados.descumprimento,
+
+                    pra_cod:
+                        pra_cod
+                })
+            }
+        );
+
+        await Swal.fire({
+            icon: "success",
+            title: "Sucesso",
+            text: "Pendência cadastrada com sucesso!"
+        });
+
+        carregarTabelars4();
+
+    }
+    catch (erro) {
+
+        console.error(erro);
+
+        Swal.fire({
+            icon: "error",
+            title: "Erro",
+            text: "Erro ao cadastrar pendência."
+        });
+    }
+}
+/* =========================
+   ANIMAÇÃO DE ENTRADA
+========================= */
+
+function animarEntrada() {
+
+    const elementos = [
+
+        ".header",
+        ".sidebar",
+        ".card"
+
+    ];
+
+    elementos.forEach((seletor, indice) => {
+
+        const elemento =
+            document.querySelector(seletor);
+
+        if(!elemento) return;
+
+        setTimeout(() => {
+
+            elemento.classList.add("animar");
+
+        }, indice * 200);
+
+    });
+}
+
+window.addEventListener(
+    "load",
+    animarEntrada
+);
+
+/* =========================
+   TRANSIÇÃO ENTRE PÁGINAS
+========================= */
+
+document.querySelectorAll("a").forEach(link => {
+
+    link.addEventListener("click", function(e){
+
+        const destino = this.href;
+
+        if(!destino || destino.includes("#"))
+            return;
+
+        e.preventDefault();
+
+        document.body.classList.add(
+            "fade-out"
+        );
+
+        setTimeout(() => {
+
+            window.location.href =
+                destino;
+
+        }, 400);
+
+    });
+
+});
+</script>
+
+    <script src="../js/menu.js"></script>
+</body>
+</html>

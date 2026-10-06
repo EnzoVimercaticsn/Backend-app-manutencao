@@ -1,0 +1,432 @@
+/* ==================================================
+   VARIÁVEIS DE DESIGN
+================================================== */
+
+:root {
+    --primary: #003e7e;
+    --primary-hover: #002f60;
+    --primary-light: #edf5fc;
+
+    --background: #f5f7fa;
+    --surface: #ffffff;
+
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+
+    --border: #e5e7eb;
+    --border-light: #f1f3f5;
+
+    --success-bg: #eaf7ef;
+    --success-text: #18794e;
+
+    --warning-bg: #fff7df;
+    --warning-text: #9a6700;
+
+    --danger-bg: #fcebea;
+    --danger-text: #c9372c;
+
+    --info-bg: #eaf2ff;
+    --info-text: #175cd3;
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+
+    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+
+    --transition: 180ms ease;
+}
+
+
+/* ==================================================
+   CONTEÚDO PRINCIPAL
+================================================== */
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 2rem;
+    background-color: var(--background);
+    color: var(--text-primary);
+}
+
+
+/* ==================================================
+   PESQUISA DO CABEÇALHO
+================================================== */
+
+.header-search-wrap {
+    position: relative;
+    width: min(32vw, 420px);
+    min-width: 260px;
+    margin-left: 1rem;
+}
+
+.header-search-wrap input {
+    width: 100%;
+    height: 44px;
+    padding: 0 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background-color: var(--surface);
+    color: var(--text-primary);
+
+    font-family: inherit;
+    font-size: 0.9rem;
+    line-height: 1.5;
+
+    outline: none;
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background-color var(--transition);
+}
+
+.header-search-wrap input::placeholder {
+    color: var(--text-muted);
+}
+
+.header-search-wrap input:hover {
+    border-color: #cbd5e1;
+}
+
+.header-search-wrap input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 62, 126, 0.1);
+}
+
+
+/* ==================================================
+   SUGESTÕES DA PESQUISA
+================================================== */
+
+.header-search-suggestions {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 200;
+
+    display: none;
+    width: 100%;
+    max-height: 320px;
+    overflow-y: auto;
+
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+}
+
+.header-search-suggestions.active {
+    display: block;
+    animation: suggestionsFadeIn 160ms ease-out;
+}
+
+.search-suggestion {
+    display: block;
+    width: 100%;
+    padding: 0.85rem 1rem;
+
+    text-align: left;
+    font-family: inherit;
+
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border-light);
+
+    cursor: pointer;
+    transition:
+        background-color var(--transition),
+        padding-left var(--transition);
+}
+
+.search-suggestion:last-child {
+    border-bottom: none;
+}
+
+.search-suggestion:hover,
+.search-suggestion:focus-visible {
+    padding-left: 1.15rem;
+    background-color: var(--primary-light);
+    outline: none;
+}
+
+.search-suggestion strong {
+    display: block;
+    margin-bottom: 3px;
+
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.search-suggestion span {
+    display: block;
+
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    line-height: 1.4;
+}
+
+@keyframes suggestionsFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ==================================================
+   CARD
+================================================== */
+
+.card {
+    overflow: hidden;
+    padding: 0;
+
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+
+/* Caso existam títulos ou conteúdos antes da tabela */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.card-title {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+
+/* ==================================================
+   TABELA
+================================================== */
+
+table {
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: separate;
+
+    color: var(--text-primary);
+    font-size: 0.875rem;
+}
+
+thead {
+    background-color: var(--primary);
+}
+
+th {
+    padding: 0.9rem 1rem;
+
+    color: #ffffff;
+    background-color: var(--primary);
+
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-align: left;
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    border: none;
+}
+
+th:first-child {
+    padding-left: 1.5rem;
+}
+
+th:last-child {
+    padding-right: 1.5rem;
+}
+
+td {
+    padding: 1rem;
+    color: var(--text-primary);
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border-light);
+}
+
+td:first-child {
+    padding-left: 1.5rem;
+}
+
+td:last-child {
+    padding-right: 1.5rem;
+}
+
+tbody tr {
+    position: relative;
+    cursor: pointer;
+    background-color: var(--surface);
+
+    transition:
+        background-color var(--transition),
+        box-shadow var(--transition);
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background-color: var(--primary-light);
+    box-shadow: inset 3px 0 0 var(--primary);
+}
+
+tbody tr:focus-within {
+    background-color: var(--primary-light);
+}
+
+
+/* ==================================================
+   STATUS
+================================================== */
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 84px;
+    padding: 0.35rem 0.7rem;
+
+    border-radius: 999px;
+
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.vencido {
+    color: var(--danger-text);
+    background-color: var(--danger-bg);
+}
+
+.vencendo {
+    color: var(--warning-text);
+    background-color: var(--warning-bg);
+}
+
+.avencer {
+    color: var(--info-text);
+    background-color: var(--info-bg);
+}
+
+.concluido {
+    color: var(--success-text);
+    background-color: var(--success-bg);
+}
+
+
+/* ==================================================
+   BARRA DE ROLAGEM DAS SUGESTÕES
+================================================== */
+
+.header-search-suggestions::-webkit-scrollbar {
+    width: 8px;
+}
+
+.header-search-suggestions::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.header-search-suggestions::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border: 2px solid var(--surface);
+    border-radius: 999px;
+}
+
+.header-search-suggestions::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8;
+}
+
+
+/* ==================================================
+   RESPONSIVIDADE
+================================================== */
+
+@media (max-width: 900px) {
+    .main-content {
+        padding: 1.5rem;
+    }
+
+    .header-search-wrap {
+        width: min(45vw, 380px);
+        min-width: 220px;
+    }
+
+    .card {
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 720px;
+    }
+}
+
+@media (max-width: 640px) {
+    .main-content {
+        padding: 1rem;
+    }
+
+    .header-search-wrap {
+        width: 100%;
+        min-width: 0;
+        margin-left: 0;
+    }
+
+    .card {
+        border-radius: var(--radius-md);
+    }
+
+    th,
+    td {
+        padding: 0.8rem;
+    }
+
+    th:first-child,
+    td:first-child {
+        padding-left: 1rem;
+    }
+
+    th:last-child,
+    td:last-child {
+        padding-right: 1rem;
+    }
+}
+
+
+/* ==================================================
+   ACESSIBILIDADE
+================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
