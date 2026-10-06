@@ -1,4 +1,5 @@
 const db = require('../db');
+const limparNotificacoesConclusaoExpiradas = require('../utils/notificacoesConclusao');
 
 exports.listarPendencias = async (req, res) => {
   try {
@@ -230,6 +231,7 @@ exports.listarMinhasSolicitacoesConclusao = async (req, res) => {
       return res.status(400).json({ error: 'Matrícula inválida' });
     }
 
+    await limparNotificacoesConclusaoExpiradas();
     const [rows] = await db.query(
       `SELECT pen_cod, pen_local, pen_desc, pen_solicitacao_conclusao,
               pen_motivo_reprovacao, pen_solicitada_em
@@ -271,6 +273,7 @@ exports.solicitarConclusao = async (req, res) => {
        SET pen_solicitacao_conclusao = 'solicitada',
            pen_prova_conclusao = ?,
            pen_motivo_reprovacao = NULL,
+           pen_decidida_em = NULL,
            pen_solicitada_por = ?,
            pen_solicitada_em = NOW()
        WHERE pen_cod = ? AND (pen_solicitacao_conclusao IS NULL OR pen_solicitacao_conclusao = 'reprovada')`,
@@ -308,7 +311,8 @@ async function decidirConclusao(req, res, aprovar) {
       `UPDATE pendencias
          SET pen_solicitacao_conclusao = ?,
            pen_prova_conclusao = NULL,
-           pen_motivo_reprovacao = ?
+           pen_motivo_reprovacao = ?,
+           pen_decidida_em = NOW()
        WHERE pen_cod = ?`,
         [aprovar ? 'aprovada' : 'reprovada', aprovar ? null : motivo, req.params.id]
     );

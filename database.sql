@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS pendencias (
     pen_motivo_reprovacao VARCHAR(2000) NULL,
     pen_solicitada_por VARCHAR(50) NULL,
     pen_solicitada_em DATETIME NULL,
+    pen_decidida_em DATETIME NULL,
     pra_cod INT NULL
 );
 
