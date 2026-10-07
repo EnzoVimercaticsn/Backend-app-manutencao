@@ -249,6 +249,9 @@ exports.listarMinhasSolicitacoesConclusao = async (req, res) => {
 
 exports.solicitarConclusao = async (req, res) => {
   const { imagemBase64 } = req.body;
+  const observacao = typeof req.body?.observacao === 'string'
+    ? req.body.observacao.trim()
+    : '';
   const penCod = Number(req.params.id);
   const solicitadaPor = String(req.usuarioMatricula ?? '').trim();
 
@@ -259,11 +262,17 @@ exports.solicitarConclusao = async (req, res) => {
   if (!Number.isSafeInteger(penCod)) {
     return res.status(400).json({ error: 'Código da pendência inválido' });
   }
+  if (observacao.length > 2000) {
+    return res.status(400).json({ error: 'A observação deve ter no máximo 2000 caracteres' });
+  }
 
-  if (typeof imagemBase64 !== 'string' || !imagemBase64.startsWith('data:image/')) {
+  const imagemCorrespondencia = typeof imagemBase64 === 'string'
+    ? imagemBase64.match(/^data:image\/[a-z0-9.+-]+;base64,([a-z0-9+/]+={0,2})$/i)
+    : null;
+  if (!imagemCorrespondencia) {
     return res.status(400).json({ error: 'Envie uma imagem válida em base64' });
   }
-  if (imagemBase64.length > 10 * 1024 * 1024) {
+  if (Buffer.byteLength(imagemCorrespondencia[1], 'base64') > 10 * 1024 * 1024) {
     return res.status(413).json({ error: 'A imagem deve ter no máximo 10 MB' });
   }
 
@@ -272,12 +281,13 @@ exports.solicitarConclusao = async (req, res) => {
       `UPDATE pendencias
        SET pen_solicitacao_conclusao = 'solicitada',
            pen_prova_conclusao = ?,
+           pen_observacao_conclusao = ?,
            pen_motivo_reprovacao = NULL,
            pen_decidida_em = NULL,
            pen_solicitada_por = ?,
            pen_solicitada_em = NOW()
        WHERE pen_cod = ? AND (pen_solicitacao_conclusao IS NULL OR pen_solicitacao_conclusao = 'reprovada')`,
-      [imagemBase64, solicitadaPor, penCod]
+      [imagemBase64, observacao || null, solicitadaPor, penCod]
     );
     if (!result.affectedRows) return res.status(409).json({ error: 'Pendência já concluída ou com solicitação em análise' });
     res.json({ message: 'Solicitação de conclusão enviada' });
@@ -287,12 +297,13 @@ exports.solicitarConclusao = async (req, res) => {
 };
 
 async function decidirConclusao(req, res, aprovar) {
-  const motivo = typeof req.body?.motivo === 'string' ? req.body.motivo.trim() : '';
-  if (!aprovar && !motivo) {
-    return res.status(400).json({ error: 'Informe o motivo da reprovação' });
+  const comentarioEnviado = req.body?.comentario ?? req.body?.motivo;
+  const comentario = typeof comentarioEnviado === 'string' ? comentarioEnviado.trim() : '';
+  if (!aprovar && !comentario) {
+    return res.status(400).json({ error: 'Informe um comentário para devolver a foto' });
   }
-  if (motivo.length > 2000) {
-    return res.status(400).json({ error: 'O motivo deve ter no máximo 2000 caracteres' });
+  if (comentario.length > 2000) {
+    return res.status(400).json({ error: 'O comentário deve ter no máximo 2000 caracteres' });
   }
 
   const connection = await db.getConnection();
@@ -314,7 +325,7 @@ async function decidirConclusao(req, res, aprovar) {
            pen_motivo_reprovacao = ?,
            pen_decidida_em = NOW()
        WHERE pen_cod = ?`,
-        [aprovar ? 'aprovada' : 'reprovada', aprovar ? null : motivo, req.params.id]
+        [aprovar ? 'aprovada' : 'reprovada', aprovar ? null : comentario, req.params.id]
     );
     if (aprovar) {
       await connection.query(

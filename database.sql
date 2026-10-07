@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS pendencias (
     pen_descumprimento_legis VARCHAR(1000),
     pen_solicitacao_conclusao VARCHAR(20) NULL,
     pen_prova_conclusao LONGTEXT NULL,
+    pen_observacao_conclusao VARCHAR(2000) NULL,
     pen_motivo_reprovacao VARCHAR(2000) NULL,
     pen_solicitada_por VARCHAR(50) NULL,
     pen_solicitada_em DATETIME NULL,

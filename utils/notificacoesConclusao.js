@@ -5,6 +5,7 @@ async function limparNotificacoesConclusaoExpiradas() {
     UPDATE pendencias
     SET pen_solicitacao_conclusao = NULL,
         pen_prova_conclusao = NULL,
+        pen_observacao_conclusao = NULL,
         pen_motivo_reprovacao = NULL,
         pen_solicitada_por = NULL,
         pen_solicitada_em = NULL,

@@ -15,7 +15,7 @@ app.use(cors({ origin: corsOrigin }));
 app.options('*', cors({ origin: corsOrigin }));
 
 // Habilita JSON
-app.use(express.json({ limit: '12mb' }));
+app.use(express.json({ limit: '14mb' }));
 
 // Rota principal
 app.get('/', (req, res) => {
@@ -42,6 +42,7 @@ async function garantirColunasSolicitacao() {
     pendencias: {
       pen_solicitacao_conclusao: 'VARCHAR(20) NULL',
       pen_prova_conclusao: 'LONGTEXT NULL',
+      pen_observacao_conclusao: 'VARCHAR(2000) NULL',
       pen_motivo_reprovacao: 'VARCHAR(2000) NULL',
       pen_decidida_em: 'DATETIME NULL',
       pen_solicitada_por: 'VARCHAR(50) NULL',
